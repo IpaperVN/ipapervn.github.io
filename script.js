@@ -137,7 +137,7 @@ const initLiveEditor = () => {
 
         // AKA Box
         { target: 'html', text: '  <div class="box">', type: 'tag' },
-        { target: 'html', text: '\n    <span>AKA</span>\n    <h3>iPaperVN</h3>\n  ', type: 'content' },
+        { target: 'html', text: '\n    <span>aKa</span>\n    <h3>iPaperVN</h3>\n  ', type: 'content' },
         { target: 'html', text: '</div>', type: 'tag' },
         { target: 'html', text: '\n', type: 'content' },
 
