@@ -1,0 +1,14 @@
+# OS / hệ thống
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencies (nếu sau này có)
+node_modules/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/

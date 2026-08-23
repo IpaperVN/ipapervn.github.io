@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kite Wiki — Kotlin Scripting hiện đại cho Paper</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">🪁</span> Kite Wiki</div>
+    <div class="tagline">Kotlin Scripting hiện đại cho Paper</div>
+
+    <div class="nav-group">Bắt đầu</div>
+    <a class="nav-item" href="#gioi-thieu">Giới thiệu</a>
+    <a class="nav-item" href="#cai-dat">Cài đặt</a>
+    <a class="nav-item" href="#nang-cap-api">Nâng cấp Paper API</a>
+
+    <div class="nav-group">Nền tảng</div>
+    <a class="nav-item" href="#cau-truc-script">Cấu trúc script</a>
+    <a class="nav-item" href="#vong-doi">Vòng đời script</a>
+    <a class="nav-item" href="#script-context">Script Context</a>
+
+    <div class="nav-group">API hiện đại</div>
+    <a class="nav-item" href="#adventure">Adventure Text</a>
+    <a class="nav-item" href="#legacy-vs-modern">Bukkit cũ → Paper mới</a>
+    <a class="nav-item" href="#event-listener">Event Listener</a>
+    <a class="nav-item" href="#command">Đăng ký lệnh</a>
+    <a class="nav-item" href="#scheduler">Scheduler (Folia-ready)</a>
+
+    <div class="nav-group">Nâng cao</div>
+    <a class="nav-item" href="#dependencies">Quản lý thư viện</a>
+    <a class="nav-item" href="#ide">Tích hợp IDE</a>
+    <a class="nav-item" href="#troubleshooting">Xử lý sự cố</a>
+
+    <div class="nav-group">Ví dụ</div>
+    <a class="nav-item" href="#vd1">Chào mừng thành viên</a>
+    <a class="nav-item" href="#vd2">Lệnh warp ngẫu nhiên</a>
+    <a class="nav-item" href="#vd3">Broadcast định kỳ</a>
+    <a class="nav-item" href="#vd4">Plugin API (PlaceholderAPI)</a>
+    <a class="nav-item" href="#vd5">HTTP request async</a>
+    <a class="nav-item" href="#vd6">Đa file + thư viện</a>
+    <a class="nav-item" href="#vd7">Kit — cấp trang bị</a>
+    <a class="nav-item" href="#vd8">Rank — prefix quyền</a>
+    <a class="nav-item" href="#vd9">Warp menu (GUI)</a>
+    <a class="nav-item" href="#vd10">Fly toggle</a>
+    <a class="nav-item" href="#vd11">PvP toggle</a>
+    <a class="nav-item" href="#vd12">NPC FancyNpcs</a>
+    <a class="nav-item" href="#vd13">Bắt Custom Event</a>
+    <a class="nav-item" href="#vd14">Tạo &amp; đọc file (message.yml)</a>
+    <a class="nav-item" href="#vd15">Quest NPC (flag bằng quyền)</a>
+
+    <div class="nav-group">Liên kết</div>
+    <a class="nav-item" href="#nguon">Tài nguyên &amp; nguồn</a>
+    <a class="nav-item guide-link" href="guide.html">📘 Lộ trình học (từ A→Z)</a>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+
+    <h1>Kite Wiki
+      <span class="sub">Kotlin Scripting cho Minecraft với <strong style="color:var(--green)">Paper API mới</strong> — server <strong style="color:var(--cyan)">Paper 1.21.11</strong> · tổng hợp từ tài liệu chính thức, định hướng hiện đại</span>
+    </h1>
+
+    <div class="hero">
+      <p><strong>Kite</strong> là plugin cung cấp <strong>runtime scripting Kotlin</strong> cho server Minecraft dựa trên Paper. Script được biên dịch thành <strong>Java bytecode</strong> (hiệu năng gần bằng native), có toàn quyền truy cập Bukkit/Paper API.</p>
+      <p>Wiki này được viết theo định hướng <strong>chỉ dùng API Paper hiện đại</strong>: Adventure <code>Component</code>, <code>sendRichMessage</code>, Paper scheduler tương thích Folia — hạn chế tối đa các hàm Bukkit cũ đã deprecated.</p>
+      <div class="badges">
+        <span class="badge acc">⚡ Paper API mới</span>
+        <span class="badge">🧩 Adventure Component</span>
+        <span class="badge acc">🪶 Folia-ready</span>
+        <span class="badge">🧵 Async / Entity Scheduler</span>
+        <span class="badge">📦 Tự tải thư viện</span>
+      </div>
+    </div>
+
+    <div class="toc-card">
+      <h3>📑 Mục lục</h3>
+      <ol>
+        <li><a href="#gioi-thieu">Giới thiệu</a></li>
+        <li><a href="#cai-dat">Cài đặt</a></li>
+        <li><a href="#nang-cap-api">Nâng cấp Paper API</a></li>
+        <li><a href="#cau-truc-script">Cấu trúc script</a></li>
+        <li><a href="#vong-doi">Vòng đời script</a></li>
+        <li><a href="#script-context">Script Context</a></li>
+        <li><a href="#adventure">Adventure Text</a></li>
+        <li><a href="#legacy-vs-modern">Bukkit cũ → Paper mới</a></li>
+        <li><a href="#event-listener">Event Listener</a></li>
+        <li><a href="#command">Đăng ký lệnh</a></li>
+        <li><a href="#scheduler">Scheduler</a></li>
+        <li><a href="#dependencies">Quản lý thư viện</a></li>
+        <li><a href="#ide">Tích hợp IDE</a></li>
+        <li><a href="#troubleshooting">Xử lý sự cố</a></li>
+        <li><a href="#vd1">Ví dụ 1 — Chào mừng</a></li>
+        <li><a href="#vd2">Ví dụ 2 — Warp ngẫu nhiên</a></li>
+        <li><a href="#vd3">Ví dụ 3 — Broadcast</a></li>
+        <li><a href="#vd4">Ví dụ 4 — Plugin API</a></li>
+        <li><a href="#vd5">Ví dụ 5 — HTTP async</a></li>
+        <li><a href="#vd6">Ví dụ 6 — Đa file + thư viện</a></li>
+        <li><a href="#vd7">Ví dụ 7 — Kit</a></li>
+        <li><a href="#vd8">Ví dụ 8 — Rank</a></li>
+        <li><a href="#vd9">Ví dụ 9 — Warp menu</a></li>
+        <li><a href="#vd10">Ví dụ 10 — Fly</a></li>
+        <li><a href="#vd11">Ví dụ 11 — PvP</a></li>
+        <li><a href="#vd12">Ví dụ 12 — NPC FancyNpcs</a></li>
+        <li><a href="#vd13">Ví dụ 13 — Bắt Custom Event</a></li>
+        <li><a href="#vd14">Ví dụ 14 — Tạo &amp; đọc file (message.yml)</a></li>
+        <li><a href="#vd15">Ví dụ 15 — Quest NPC (flag bằng quyền)</a></li>
+      </ol>
+    </div>
+
+    <!-- ===================== 1. GIỚI THIỆU ===================== -->
+    <h2 id="gioi-thieu"><span class="num">1</span>Giới thiệu về Kite</h2>
+
+    <h3>Kite là gì?</h3>
+    <p>Kite là <strong>runtime scripting Kotlin</strong> cho server Minecraft. Thay vì một ngôn ngữ script riêng (như Skript), bạn viết bằng <strong>Kotlin</strong> và truy cập trực tiếp toàn bộ Bukkit/Paper API — với sức mạnh ngang một plugin Java thực thụ.</p>
+
+    <h3>Điểm mạnh</h3>
+    <ul>
+      <li><strong>Hiệu năng cao:</strong> biên dịch thành Java bytecode, gần bằng native.</li>
+      <li><strong>Toàn quyền API:</strong> dùng Bukkit API, thư viện, và API của các plugin khác.</li>
+      <li><strong>Tương thích Folia:</strong> có sẵn wrapper scheduler tương thích Folia.</li>
+      <li><strong>Đăng ký lệnh đơn giản:</strong> chỉ với một hàm <code>command(...)</code>.</li>
+      <li><strong>Lắng nghe event:</strong> Bukkit/Spigot/Paper hoặc custom event của plugin.</li>
+      <li><strong>Đa file:</strong> chia script thành nhiều file dễ quản lý.</li>
+    </ul>
+
+    <h3>Yêu cầu hệ thống</h3>
+    <table>
+      <tr><th>Thành phần</th><th>Yêu cầu</th></tr>
+      <tr><td>Server</td><td>Dựa trên <strong>Paper</strong> — bạn đang dùng <strong>1.21.11</strong></td></tr>
+      <tr><td>Java</td><td>Java <strong>21</strong></td></tr>
+      <tr><td>Kiến thức</td><td>Kotlin cơ bản</td></tr>
+    </table>
+
+    <div class="callout note">
+      <div class="ttl">📌 Ghi chú phiên bản</div>
+      <p><strong>Kite đã có phiên bản hỗ trợ Paper 1.21.11</strong> — khớp với server của bạn; chỉ cần đặt script lên server là chạy. Nếu dùng IntelliJ để có gợi ý code đúng bản API 1.21.11, bạn nên khai báo <code>paper-api:1.21.11</code> tường minh trong starter project — xem <a href="#nang-cap-api">mục 3</a>.</p>
+    </div>
+
+    <!-- ===================== 2. CÀI ĐẶT ===================== -->
+    <h2 id="cai-dat"><span class="num">2</span>Cài đặt</h2>
+
+    <ol>
+      <li><strong>Tải JAR</strong> của Kite từ <strong>Modrinth</strong>, <strong>Hangar</strong>, hoặc <strong>GitHub</strong> (<code>github.com/EchoNineLabs/Kite</code>).</li>
+      <li>Đặt file JAR vào thư mục <span class="file-path">plugins</span>.</li>
+      <li>Khởi động lại server → thư mục <span class="file-path">plugins/Kite/scripts</span> được tạo tự động.</li>
+    </ol>
+
+    <div class="callout success">
+      <div class="ttl">✅ Kiểm tra nhanh</div>
+      <p>Tạo <span class="file-path">plugins/Kite/scripts/test.kite.kts</span>:</p>
+      <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Kite đang chạy! 🪁"</span>)
+}</code></pre>
+      <p>Chạy <span class="cmd">/kite reloadall</span> và quan sát console.</p>
+    </div>
+
+    <!-- ===================== 3. NÂNG CẤP PAPER API ===================== -->
+    <h2 id="nang-cap-api"><span class="num">3</span>Nâng cấp Paper API lên bản mới</h2>
+
+    <div class="callout note">
+      <div class="ttl">💡 Chỉ cần nếu bạn dùng IDE</div>
+      <p>Đặt script trực tiếp lên server thì <strong>không cần phần này</strong> — Kite đã hỗ trợ Paper 1.21.11 và tự biên dịch. Mục này chỉ dành cho ai dùng IntelliJ và muốn <strong>gợi ý code khớp bản API 1.21.11</strong>.</p>
+    </div>
+
+    <p><strong>Kite đã có bản hỗ trợ Paper 1.21.11</strong> — bạn không cần tự build. Tuy nhiên, Kite mặc định đi kèm sẵn <code>paper-api 1.21.1</code>. Để <strong>IDE gợi ý code đúng bản 1.21.11</strong> (khớp server của bạn), bạn khai báo <code>paper-api:1.21.11</code> tường minh trong <span class="file-path">build.gradle.kts</span> của starter project — <strong>không phải bằng annotation trong script</strong>:</p>
+
+    <pre><code>dependencies {
+    <span class="tok-com">// Loại bỏ Paper API 1.21.1 mà Kite đi kèm</span>
+    api(<span class="tok-str">"dev.echonine.kite:kite:1.2.4"</span>) {
+        exclude(module = <span class="tok-str">"paper-api"</span>)
+    }
+    <span class="tok-com">// Khai báo Paper API khớp server của bạn (1.21.11)</span>
+    api(<span class="tok-str">"io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT"</span>)
+}</code></pre>
+
+    <p>Sau khi sửa, reload Gradle trong IntelliJ. Script của bạn giờ được IDE biên dịch với <strong>Paper API 1.21.11</strong>, khớp với server và có đầy đủ method/class mới nhất.</p>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Quan trọng</div>
+      <ul style="margin:0">
+        <li>Annotation <code>@file:Dependency</code> dùng để <strong>tải thư viện runtime phụ trợ</strong>, <strong>không</strong> để đổi Paper API version.</li>
+        <li>Việc khai báo version Paper API (cho IDE gợi ý code) chỉ thực hiện qua <strong>starter project Gradle</strong>.</li>
+        <li>Server thực tế phải chạy bản Paper <strong>tương đương hoặc mới hơn</strong> API bạn khai báo.</li>
+      </ul>
+    </div>
+
+    <!-- ===================== 4. CẤU TRÚC SCRIPT ===================== -->
+    <h2 id="cau-truc-script"><span class="num">4</span>Cấu trúc script</h2>
+
+    <h3>Đuôi file &amp; vị trí</h3>
+    <p>Script có đuôi <span class="file-path">.kite.kts</span>, đặt trong <span class="file-path">plugins/Kite/scripts</span> (trực tiếp hoặc trong thư mục con).</p>
+
+    <h3>Script một file</h3>
+    <pre><code><span class="tok-com">// scripts/hello.kite.kts</span>
+<span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Xin chào từ script một file!"</span>)
+}</code></pre>
+
+    <h3>Script đa file</h3>
+    <p>Nếu đặt trong thư mục con, thư mục đó <strong>bắt buộc có file entry point</strong> tên <span class="file-path">main.kite.kts</span>. Các file khác import qua <code>@file:Import</code>.</p>
+
+    <pre><code><span class="tok-com">// scripts/my_plugin/main.kite.kts</span>
+<span class="tok-ann">@file:Import</span>(<span class="tok-str">"helpers.kite.kts"</span>)
+
+<span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Đã nạp my_plugin!"</span>)
+    <span class="tok-fn">printHelper</span>() <span class="tok-com">// hàm từ helpers.kite.kts</span>
+}</code></pre>
+
+    <pre><code><span class="tok-com">// scripts/my_plugin/helpers.kite.kts</span>
+<span class="tok-kw">fun</span> <span class="tok-fn">printHelper</span>() {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Tôi là helper! 🧰"</span>)
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">💡 Ghi chú</div>
+      <p>Script một file và đa file <em>có thể dùng đồng thời</em> trong cùng server.</p>
+    </div>
+
+    <!-- ===================== 5. VÒNG ĐỜI SCRIPT ===================== -->
+    <h2 id="vong-doi"><span class="num">5</span>Vòng đời script</h2>
+
+    <p>Mỗi script có hai khối: <code>onLoad</code> (sau khi nạp) và <code>onUnload</code> (trước khi gỡ). Dùng chúng để khởi tạo và dọn dẹp tài nguyên.</p>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Lời khuyên từ nhà phát triển</div>
+      <p>Hãy <strong>tận dụng triệt để</strong> hai khối này để hủy task, xóa dữ liệu tạm… khi script bị gỡ.</p>
+    </div>
+
+    <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Hello, World!"</span>)
+}
+
+<span class="tok-kw">onUnload</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Goodbye, World!"</span>)
+}</code></pre>
+
+    <h3>⚠️ Biên dịch bất đồng bộ</h3>
+    <p>Kite biên dịch script thành bytecode (cache tại <span class="file-path">plugins/Kite/cache</span>). Các lời gọi hàm, khởi tạo property/object <strong>ở top-level</strong> chạy ngay sau biên dịch, nhưng vì biên dịch là <strong>bất đồng bộ</strong>, bạn nên <strong>tránh gọi hàm non-thread-safe</strong> ở ngoài các khối <code>onLoad</code>/<code>onUnload</code>.</p>
+
+    <div class="callout danger">
+      <div class="ttl">🚫 Ví dụ SAI — sẽ ném exception</div>
+      <p><code>getTargetBlockExact</code> chỉ gọi được trên main thread, nhưng đoạn dưới chạy ngay sau biên dịch:</p>
+      <pre><code><span class="tok-var">val</span> targetBlock = server.getPlayer(<span class="tok-str">"Player"</span>).getTargetBlockExact(<span class="tok-num">10</span>)
+
+<span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(targetBlock.type)
+}</code></pre>
+    </div>
+
+    <div class="callout success">
+      <div class="ttl">✅ Ví dụ ĐÚNG — đưa vào trong onLoad</div>
+      <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-var">val</span> targetBlock = server.getPlayer(<span class="tok-str">"Player"</span>).getTargetBlockExact(<span class="tok-num">10</span>)
+    <span class="tok-fn">println</span>(targetBlock.type)
+}</code></pre>
+    </div>
+
+    <!-- ===================== 6. SCRIPT CONTEXT ===================== -->
+    <h2 id="script-context"><span class="num">6</span>Script Context</h2>
+
+    <p>Kite cung cấp các biến <strong>context</strong> luôn có sẵn trong mọi script. Hãy dùng chúng thay cho các truy cập static của Bukkit (xem mục <a href="#legacy-vs-modern">Bukkit cũ → Paper mới</a>).</p>
+
+    <table>
+      <tr><th>Biến</th><th>Kiểu</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>name</code></td><td><code>File</code></td><td>Tên script</td></tr>
+      <tr><td><code>entryPoint</code></td><td><code>File</code></td><td>File điểm vào</td></tr>
+      <tr><td><code>plugin</code></td><td><code>JavaPlugin</code></td><td>Instance plugin Kite</td></tr>
+      <tr><td><code>server</code></td><td><code>Server</code></td><td>Instance server (Paper)</td></tr>
+      <tr><td><code>logger</code></td><td><code>ComponentLogger</code></td><td>Logger hỗ trợ Adventure</td></tr>
+    </table>
+
+    <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">logger</span>.info(<span class="tok-str">"Script "</span> + name.name + <span class="tok-str">" đã được nạp!"</span>)
+    <span class="tok-fn">println</span>(server.name)
+}</code></pre>
+
+    <h3>Import tự động</h3>
+    <p>Hầu hết import Bukkit/Paper/Adventure được thêm tự động lúc biên dịch:</p>
+    <ul>
+      <li><code>org.bukkit</code></li>
+      <li><code>io.papermc.paper</code></li>
+      <li><code>com.destroytokyo.paper</code></li>
+      <li><code>net.kyori.adventure.text</code> — <strong>Adventure đã có sẵn</strong></li>
+    </ul>
+    <p>API plugin khác <strong>phải import tường minh</strong> (xem <a href="#vd4">Ví dụ 4</a>).</p>
+
+    <!-- ===================== 7. ADVENTURE TEXT ===================== -->
+    <h2 id="adventure"><span class="num">7</span>Adventure Text — hệ thống chat hiện đại</h2>
+
+    <p><strong>Adventure</strong> là thư viện chat của Paper, thay thế hoàn toàn <code>ChatColor</code> và chuỗi màu kiểu cũ. Kite <strong>tự import sẵn</strong> <code>net.kyori.adventure.text</code>.</p>
+
+    <h3>7.1 — Rich Text (mini tags) — nhanh nhất</h3>
+    <p>Kite cung cấp tiện ích <code>sendRichMessage</code> nhận chuỗi có tag màu:</p>
+    <pre><code>player.sendRichMessage(<span class="tok-str">"&lt;red&gt;Máu thấp!&lt;/red&gt; &lt;yellow&gt;Bạn có &lt;gold&gt;${player.health}&lt;/gold&gt; HP."</span>)
+player.sendRichMessage(<span class="tok-str">"&lt;bold&gt;Nhấn để mở web: &lt;click:open_url:'https://example.com'&gt;&lt;underline&gt;tại đây&lt;/click&gt;."</span>)</code></pre>
+
+    <h3>7.2 — Component trực tiếp</h3>
+    <pre><code><span class="tok-var">val</span> msg = Component.text(<span class="tok-str">"Chào "</span>)
+    .color(NamedTextColor.<span class="tok-cls">GREEN</span>)
+    .append(Component.text(player.name).color(NamedTextColor.<span class="tok-cls">YELLOW</span>))
+    .append(Component.text(<span class="tok-str">"!"</span>).decorate(TextDecoration.<span class="tok-cls">BOLD</span>))
+
+player.sendMessage(msg)</code></pre>
+
+    <h3>7.3 — Các tiện ích chính</h3>
+    <table>
+      <tr><th>Ngữ cảnh</th><th>Hàm hiện đại</th></tr>
+      <tr><td>Gửi chat player</td><td><code>player.sendRichMessage("...")</code> / <code>player.sendMessage(Component)</code></td></tr>
+      <tr><td>Gửi chat player (không parse)</td><td><code>player.sendPlainMessage("...")</code></td></tr>
+      <tr><td>Broadcast toàn server</td><td><code>server.sendRichMessage("...")</code></td></tr>
+      <tr><td>Action bar</td><td><code>player.sendRichActionBar("...")</code> / <code>player.sendActionBar(Component)</code></td></tr>
+      <tr><td>Title</td><td><code>player.showTitle(Title.title(Component, Component))</code></td></tr>
+      <tr><td>Kick</td><td><code>player.kick(Component)</code></td></tr>
+      <tr><td>Logger</td><td><code>logger.info(Component)</code> — logger là <code>ComponentLogger</code></td></tr>
+    </table>
+
+    <!-- ===================== 8. LEGACY VS MODERN ===================== -->
+    <h2 id="legacy-vs-modern"><span class="num">8</span>Bukkit cũ → Paper mới</h2>
+
+    <p>Bảng quy đổi nhanh các thói quen <strong>Bukkit API cũ</strong> sang <strong>Paper/Adventure hiện đại</strong>. Trong wiki này, mọi ví dụ đều dùng cột bên phải.</p>
+
+    <table>
+      <tr><th>❌ Bukkit cũ (legacy)</th><th>✅ Paper/Adventure mới</th></tr>
+      <tr><td class="old"><code>player.sendMessage("&amp;aHello")</code></td><td class="new"><code>player.sendRichMessage("&lt;green&gt;Hello")</code></td></tr>
+      <tr><td class="old"><code>server.broadcastMessage("Hi")</code></td><td class="new"><code>server.sendRichMessage("Hi")</code></td></tr>
+      <tr><td class="old"><code>Bukkit.getPlayer(name)</code></td><td class="new"><code>server.getPlayer(name)</code> (dùng context <code>server</code>)</td></tr>
+      <tr><td class="old"><code>Bukkit.getServer()</code></td><td class="new">Biến context <code>server</code> có sẵn</td></tr>
+      <tr><td class="old"><code>ChatColor.RED</code></td><td class="new"><code>NamedTextColor.RED</code> / tag <code>&lt;red&gt;</code></td></tr>
+      <tr><td class="old"><code>player.getLocation()</code></td><td class="new"><code>player.location</code></td></tr>
+      <tr><td class="old"><code>player.getWorld()</code></td><td class="new"><code>player.world</code></td></tr>
+      <tr><td class="old"><code>player.sendTitle(a, b, 10, 20, 10)</code></td><td class="new"><code>player.showTitle(Title.title(Component, Component))</code></td></tr>
+      <tr><td class="old"><code>player.sendActionBar("...")</code> (String)</td><td class="new"><code>player.sendRichActionBar("...")</code></td></tr>
+      <tr><td class="old"><code>player.kick("reason")</code></td><td class="new"><code>player.kick(Component.text("reason"))</code></td></tr>
+      <tr><td class="old">Định thời qua <code>Bukkit.getScheduler()</code></td><td class="new"><code>server.asyncScheduler</code> / <code>player.scheduler</code> (xem <a href="#scheduler">Scheduler</a>)</td></tr>
+      <tr><td class="old"><code>Bukkit.isPrimaryThread()</code></td><td class="new"><code>server.isPrimaryThread</code></td></tr>
+    </table>
+
+    <div class="callout note">
+      <div class="ttl">💡 Nguyên tắc chung</div>
+      <ul style="margin:0">
+        <li>Ưu tiên <strong>Adventure</strong> để làm text, không dùng <code>ChatColor</code>/mã <code>&amp;</code>.</li>
+        <li>Dùng <strong>biến context</strong> (<code>server</code>, <code>plugin</code>, <code>logger</code>) thay cho truy cập static <code>Bukkit.*</code>.</li>
+        <li>Dùng <strong>Paper scheduler</strong> (<code>EntityScheduler</code>, <code>AsyncScheduler</code>, <code>GlobalRegionScheduler</code>) để tương thích Folia.</li>
+      </ul>
+    </div>
+
+    <!-- ===================== 9. EVENT LISTENER ===================== -->
+    <h2 id="event-listener"><span class="num">9</span>Event Listener</h2>
+
+    <p>Tạo listener bằng <code>on&lt;Event&gt;</code>. Event <strong>tự động hủy đăng ký</strong> khi script gỡ. Luôn dùng Adventure để gửi message.</p>
+
+    <h3>Ví dụ cơ bản</h3>
+    <pre><code><span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-kw">if</span> (event.player.hasPlayedBefore() == <span class="tok-cm">true</span>) {
+        event.player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Chào mừng trở lại, &lt;red&gt;${event.player.name}!"</span>)
+    }
+}</code></pre>
+
+    <h3>Chỉ định priority</h3>
+    <pre><code><span class="tok-kw">on</span>&lt;PlayerDeathEvent&gt;(priority = EventPriority.<span class="tok-cls">MONITOR</span>) {
+    <span class="tok-com">// xử lý sau cùng, không thay đổi kết quả event</span>
+}</code></pre>
+
+    <h3>Title chào mừng bằng Adventure</h3>
+    <pre><code><span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player
+    player.showTitle(
+        Title.title(
+            Component.text(<span class="tok-str">"Chào mừng!"</span>).color(NamedTextColor.<span class="tok-cls">GOLD</span>),
+            Component.text(player.name).color(NamedTextColor.<span class="tok-cls">YELLOW</span>)
+        )
+    )
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">🧩 Custom events</div>
+      <p>Lắng nghe event <strong>tùy biến của plugin khác</strong> bằng cách import loại event và dùng <code>on&lt;YourCustomEvent&gt;</code>.</p>
+    </div>
+
+    <!-- ===================== 10. COMMAND ===================== -->
+    <h2 id="command"><span class="num">10</span>Đăng ký lệnh (Command)</h2>
+
+    <p>Lệnh qua API Kite <strong>tự động hủy đăng ký</strong> khi script gỡ. Chỉ cần <strong>tên lệnh</strong> là bắt buộc.</p>
+
+    <pre><code>command(<span class="tok-str">"echo"</span>) {
+    description = <span class="tok-str">"In ra message người chơi truyền vào."</span>
+    permission = <span class="tok-str">"scripts.command.echo"</span>
+    usage = <span class="tok-str">"/echo [message]"</span>
+    aliases = <span class="tok-fn">listOf</span>(<span class="tok-str">"e"</span>, <span class="tok-str">"print"</span>)
+
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-var">val</span> message = args.joinToString(<span class="tok-str">" "</span>)
+        sender.sendRichMessage(message)
+    }
+
+    tabComplete { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">return@tabComplete</span> <span class="tok-fn">emptyList</span>()
+    }
+}</code></pre>
+
+    <h3>Tham số khối lệnh</h3>
+    <table>
+      <tr><th>Thuộc tính</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>description</code></td><td>Mô tả lệnh</td></tr>
+      <tr><td><code>permission</code></td><td>Permission cần thiết</td></tr>
+      <tr><td><code>usage</code></td><td>Cú pháp sử dụng</td></tr>
+      <tr><td><code>aliases</code></td><td>Danh sách lệnh tắt</td></tr>
+      <tr><td><code>execute { sender, args -&gt; }</code></td><td>Logic khi gõ lệnh</td></tr>
+      <tr><td><code>tabComplete { sender, args -&gt; }</code></td><td>Gợi ý tab</td></tr>
+    </table>
+
+    <h3>Kiểm tra người gọi là player + truy cập world qua property</h3>
+    <pre><code>command(<span class="tok-str">"heal"</span>) {
+    permission = <span class="tok-str">"scripts.command.heal"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">is</span> <span class="tok-cls">Player</span>) {
+            sender.health = sender.maxHealth
+            sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;Bạn đã được hồi máu!"</span>)
+            <span class="tok-com">// sender.world — property Paper thay cho getWorld()</span>
+            <span class="tok-fn">println</span>(sender.world.name)
+        } <span class="tok-kw">else</span> {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Lệnh này chỉ dùng cho người chơi."</span>)
+        }
+    }
+}</code></pre>
+
+    <!-- ===================== 11. SCHEDULER ===================== -->
+    <h2 id="scheduler"><span class="num">11</span>Scheduler — bộ lập lịch Folia-ready</h2>
+
+    <p>Task qua API Kite <strong>tự động hủy</strong> khi script gỡ. Nếu dùng trực tiếp Bukkit/Paper API, bạn phải tự quản lý vòng đời. Trong wiki này, ta ưu tiên <strong>Paper scheduler</strong> thay vì <code>BukkitScheduler</code> cũ (không tương thích Folia).</p>
+
+    <h3>11.1 — EntityScheduler (khuyến nghị cho player)</h3>
+    <p>Thực thi task trên <strong>region sở hữu entity</strong> — an toàn với Folia. Hàm: <code>run</code>, <code>runDelayed</code>, <code>runAtFixedRate</code>.</p>
+    <pre><code><span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    event.player.scheduler.run {
+        event.player.sendPlainMessage(<span class="tok-str">"Xin chào, ${it.name}, chào mừng đến server!"</span>)
+    }
+    event.player.scheduler.runDelayed(<span class="tok-num">30</span>, TimeUnit.SECONDS, {
+        event.player.kick(Component.text(<span class="tok-str">"Bạn đã chơi hơn 30 giây... Quá lâu rồi!"</span>))
+    })
+    event.player.scheduler.runAtFixedRate(<span class="tok-num">5</span>, <span class="tok-num">5</span>, TimeUnit.SECONDS, {
+        event.player.level = event.player.level + <span class="tok-num">1</span>
+    })
+}</code></pre>
+
+    <h3>11.2 — AsyncScheduler (cho I/O, HTTP)</h3>
+    <p>Chạy <strong>bất đồng bộ</strong>, tách khỏi tick server. Hàm: <code>runNow</code>, <code>runDelayed</code>, <code>runAtFixedRate</code>.</p>
+    <pre><code><span class="tok-kw">import</span> java.net.URI
+<span class="tok-kw">import</span> java.net.http.HttpClient
+<span class="tok-kw">import</span> java.net.http.HttpRequest
+<span class="tok-kw">import</span> java.net.http.HttpResponse
+
+<span class="tok-var">val</span> client = HttpClient.newHttpClient()
+
+command(<span class="tok-str">"country"</span>) {
+    permission = <span class="tok-str">"scripts.country"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">is</span> <span class="tok-cls">Player</span>) {
+            server.asyncScheduler.runNow {
+                <span class="tok-com">// Kiểm tra thread bằng Paper API</span>
+                sender.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Thread: &lt;yellow&gt;${Thread.currentThread().name}"</span>)
+                <span class="tok-var">val</span> req = HttpRequest.newBuilder().GET()
+                    .uri(URI(<span class="tok-str">"https://get.geojs.io/v1/ip/country/full/${sender.address.address}"</span>))
+                    .build()
+                <span class="tok-var">val</span> country = client.send(req, HttpResponse.BodyHandlers.ofString()).body().trim()
+                sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;Quốc gia: &lt;yellow&gt;$country"</span>)
+            }
+        }
+    }
+}</code></pre>
+
+    <h3>11.3 — GlobalRegionScheduler</h3>
+    <p>Chạy trên <strong>global region thread</strong>; nếu không dùng Folia thì quay về main thread.</p>
+    <pre><code>server.globalRegionScheduler.runDelayed(<span class="tok-num">10</span>, TimeUnit.SECONDS) {
+    server.sendRichMessage(<span class="tok-str">"&lt;gold&gt;10 giây đã trôi qua!"</span>)
+}</code></pre>
+
+    <h3>11.4 — BukkitScheduler (chỉ khi không dùng Folia)</h3>
+    <p>Bám theo tick server, <strong>không tương thích Folia</strong>. Hàm: <code>runTask</code>, <code>runTaskAsync</code>, <code>runTaskTimer</code>, <code>runTaskTimerAsync</code>.</p>
+    <pre><code>server.scheduler.runTaskTimer(delayTicks = <span class="tok-num">20</span>, periodTicks = <span class="tok-num">20</span> * <span class="tok-num">10</span>) {
+    server.sendRichMessage(<span class="tok-str">"&lt;aqua&gt;Thông báo định kỳ (BukkitScheduler)"</span>)
+}</code></pre>
+
+    <div class="callout success">
+      <div class="ttl">✅ Quy tắc chọn scheduler</div>
+      <ul style="margin:0">
+        <li><strong>Thao tác trên một entity/player</strong> → <code>player.scheduler</code> (EntityScheduler).</li>
+        <li><strong>I/O, HTTP, tính toán nặng</strong> → <code>server.asyncScheduler</code>.</li>
+        <li><strong>Task toàn server, không theo entity</strong> → <code>server.globalRegionScheduler</code>.</li>
+        <li><strong>Chỉ chạy không Folia</strong> → <code>server.scheduler</code> (BukkitScheduler).</li>
+      </ul>
+    </div>
+
+    <!-- ===================== 12. DEPENDENCIES ===================== -->
+    <h2 id="dependencies"><span class="num">12</span>Quản lý thư viện (Dependencies)</h2>
+
+    <p>Kite tự <strong>tải và nạp thư viện</strong> từ Maven repository lúc chạy.</p>
+
+    <h3>Khai báo Repository</h3>
+    <p>Dùng <code>@file:Repository</code> (lặp lại được). Nên dùng mirror thay vì Maven Central gốc:</p>
+    <pre><code><span class="tok-ann">@file:Repository</span>(<span class="tok-str">"https://maven-central.storage-download.googleapis.com/maven2"</span>)</code></pre>
+
+    <h3>Khai báo Dependency</h3>
+    <pre><code><span class="tok-ann">@file:Dependency</span>(<span class="tok-str">"com.github.ben-manes.caffeine:caffeine:3.2.3"</span>)
+
+<span class="tok-com">// Tắt giải quyết transitive nếu cần:</span>
+<span class="tok-ann">@file:Dependency</span>(<span class="tok-str">"groupId:artifactId:version"</span>, withTransitiveDependencies = <span class="tok-cm">false</span>)</code></pre>
+
+    <h3>Relocation (đổi package) — tùy chọn</h3>
+    <pre><code><span class="tok-ann">@file:Relocation</span>(<span class="tok-str">"pattern.from"</span>, <span class="tok-str">"pattern.to"</span>)</code></pre>
+
+    <p>Dependency tải vào <span class="file-path">plugins/Kite/libs</span>. Reload script để biên dịch; thành công in <span class="cmd">Script ... successfully loaded</span>.</p>
+
+    <div class="callout note">
+      <div class="ttl">💡 Với IntelliJ IDEA</div>
+      <p>Repository/dependency khai báo bằng annotation cũng nên thêm vào <span class="file-path">build.gradle.kts</span> để có gợi ý code.</p>
+    </div>
+
+    <!-- ===================== 13. IDE ===================== -->
+    <h2 id="ide"><span class="num">13</span>Tích hợp IDE (IntelliJ IDEA) — tùy chọn</h2>
+
+    <div class="callout success">
+      <div class="ttl">✅ IDE KHÔNG bắt buộc</div>
+      <p>Script chạy trực tiếp trên server: chỉ cần đặt file <span class="file-path">.kite.kts</span> vào <span class="file-path">plugins/Kite/scripts/</span> rồi chạy <span class="cmd">/kite reloadall</span> — Kite tự biên dịch ngay tại runtime. <strong>Không cần Gradle hay IntelliJ để chạy.</strong></p>
+      <p style="margin-bottom:0">Mục này dành cho ai muốn có <strong>gợi ý code, bắt lỗi sớm, và xem tài liệu API</strong> khi viết — hoàn toàn <em>tùy chọn</em>.</p>
+    </div>
+
+    <ol>
+      <li><strong>Clone starter project:</strong>
+        <pre><code>git clone https://github.com/EchoNineLabs/KiteScripting.git</code></pre>
+        Mở trong IntelliJ IDEA và load Gradle.
+      </li>
+      <li><strong>Kích hoạt Kite Script definition:</strong>
+        <span class="kbd">Settings</span> → <span class="kbd">Languages &amp; Frameworks</span> → <span class="kbd">Kotlin</span> → <span class="kbd">Kotlin Scripting</span> → <strong>Scan Classpath</strong>. Khi thấy <em>"1 new definition(s) found"</em> → <strong>Apply</strong> → <strong>OK</strong>. Xác nhận <strong>Kite Script</strong> (<span class="file-path">.kite.kts</span>) đã bật.
+      </li>
+      <li><strong>Nâng cấp Paper API</strong> (nếu muốn) — xem <a href="#nang-cap-api">mục 3</a>.</li>
+    </ol>
+
+    <p><strong>Thêm dependency remote tùy biến</strong> (ví dụ PlaceholderAPI) — phải khai báo cả annotation lẫn build script:</p>
+    <pre><code><span class="tok-com">// example.kite.kts</span>
+<span class="tok-ann">@file:Repository</span>(<span class="tok-str">"https://repo.extendedclip.com/releases/"</span>)
+<span class="tok-ann">@file:Dependency</span>(<span class="tok-str">"me.clip:placeholderapi:2.11.7"</span>)</code></pre>
+    <pre><code><span class="tok-com">// build.gradle.kts</span>
+repositories {
+    maven { url = uri(<span class="tok-str">"https://repo.extendedclip.com/releases/"</span>) }
+}
+dependencies {
+    api(<span class="tok-str">"me.clip:placeholderapi:2.11.7"</span>)
+}</code></pre>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Lưu ý</div>
+      <p>Nhớ thêm dependency vào <strong>cả build script</strong>, nếu không sẽ <em>không có gợi ý code</em>.</p>
+    </div>
+
+    <h3>Ghi chú viết script trong IDE</h3>
+    <ul>
+      <li>Script có thể đặt bất kỳ đâu, khuyến nghị thư mục <span class="file-path">src</span>.</li>
+      <li>File import qua <code>@file:Import</code> <em>không xuất hiện trong gợi ý code</em> do lỗi editor.</li>
+    </ul>
+
+    <!-- ===================== 14. TROUBLESHOOTING ===================== -->
+    <h2 id="troubleshooting"><span class="num">14</span>Xử lý sự cố</h2>
+
+    <h3>14.1 — Import xung đột</h3>
+    <p>Các API tự import có thể xung đột kiểu (vd <code>org.bukkit.Sound</code> vs <code>net.kyori.adventure.sound.Sound</code>). Giải pháp: import tường minh, dùng tên đầy đủ, hoặc alias:</p>
+    <pre><code><span class="tok-kw">import</span> net.kyori.adventure.sound.Sound <span class="tok-kw">as</span> AdventureSound</code></pre>
+
+    <h3>14.2 — Unresolved References (fork server)</h3>
+    <p>Một số fork làm hỏng class loading, khiến mọi script biên dịch thất bại. <strong>Không xảy ra</strong> trên Paper/Folia/Purpur/Pufferfish. Giải pháp: thêm JVM flag</p>
+    <pre><code>-Dkite.compat.dynamic-server-jar=true</code></pre>
+    <p>Tính năng này <strong>thử nghiệm</strong>, không đảm bảo hoạt động mọi trường hợp.</p>
+
+    <h3>14.3 — Trùng tên class (Duplicate JVM Class Name)</h3>
+    <p>Xảy ra với <code>@Import</code>: hai script cùng tên file (dù khác thư mục) biên dịch thành cùng class <code>Name_kite</code>. Giải pháp: dùng tên khác, hoặc khai báo <code>package</code>:</p>
+    <pre><code><span class="tok-com">// extras/main.kite.kts</span>
+<span class="tok-kw">package</span> extras
+
+<span class="tok-kw">fun</span> <span class="tok-fn">fromExtras</span>() = <span class="tok-str">"Từ thư mục extras"</span></code></pre>
+    <pre><code><span class="tok-com">// my_script/main.kite.kts</span>
+<span class="tok-ann">@file:Import</span>(<span class="tok-str">"../extras/main.kite.kts"</span>)
+<span class="tok-kw">import</span> extras.*
+
+<span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-fn">fromExtras</span>())
+}</code></pre>
+
+    <!-- ===================== 15. VÍ DỤ ===================== -->
+    <h2 id="vd1"><span class="num">15</span>Ví dụ script hoàn chỉnh (Paper API mới)</h2>
+    <p>Các script mẫu đều dùng Adventure, context <code>server</code>, và Paper scheduler. Lưu mỗi đoạn thành file <span class="file-path">.kite.kts</span> trong <span class="file-path">plugins/Kite/scripts</span> rồi reload.</p>
+
+    <h3 id="vd1">Ví dụ 1 — Chào mừng thành viên</h3>
+    <p>Gửi lời chào khác nhau cho thành viên mới/cũ, kèm task chào muộn sau 5 giây bằng <code>server.scheduler</code>.</p>
+    <pre><code><span class="tok-com">// welcome.kite.kts</span>
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player
+    <span class="tok-var">val</span> isNew = !player.hasPlayedBefore()
+
+    <span class="tok-kw">if</span> (isNew) {
+        player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;🎉 Chào mừng lần đầu, &lt;bold&gt;${player.name}&lt;/bold&gt; đến server!"</span>)
+    } <span class="tok-kw">else</span> {
+        player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Chào mừng trở lại, &lt;red&gt;${player.name}&lt;/gray&gt;!"</span>)
+    }
+
+    <span class="tok-com">// Task chào muộn sau 5 giây (100 tick)</span>
+    server.scheduler.runTask(<span class="tok-num">100</span>) {
+        <span class="tok-kw">if</span> (player.isOnline) {
+            player.sendRichMessage(<span class="tok-str">"&lt;aqua&gt;Nhớ xem luật server: &lt;click:open_url:'https://example.com/rules'&gt;&lt;underline&gt;tại đây&lt;/click&gt;!"</span>)
+        }
+    }
+}
+
+<span class="tok-kw">onUnload</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Đã gỡ script welcome."</span>)
+}</code></pre>
+
+    <h3 id="vd2">Ví dụ 2 — Lệnh warp ngẫu nhiên</h3>
+    <p>Lệnh <span class="cmd">/randomtp</span> dịch chuyển người chơi ngẫu nhiên. Dùng property <code>sender.world</code>, <code>getHighestBlockYAt</code> (Paper) và <code>EntityScheduler</code>.</p>
+    <pre><code><span class="tok-com">// randomtp.kite.kts</span>
+<span class="tok-kw">import</span> org.bukkit.Location
+
+command(<span class="tok-str">"randomtp"</span>) {
+    description = <span class="tok-str">"Dịch chuyển ngẫu nhiên trong bán kính cho trước."</span>
+    permission = <span class="tok-str">"scripts.randomtp"</span>
+    usage = <span class="tok-str">"/randomtp &lt;bán_kính&gt;"</span>
+    aliases = <span class="tok-fn">listOf</span>(<span class="tok-str">"rtp"</span>)
+
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Chỉ người chơi mới dùng được lệnh này."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        <span class="tok-var">val</span> radius = args.firstOrNull()?.toIntOrNull() ?: <span class="tok-num">500</span>
+        <span class="tok-var">val</span> world = sender.world            <span class="tok-com">// Paper property, thay cho getWorld()</span>
+
+        <span class="tok-var">val</span> x = (-radius..radius).random()
+        <span class="tok-var">val</span> z = (-radius..radius).random()
+        <span class="tok-var">val</span> y = world.getHighestBlockYAt(x, z)   <span class="tok-com">// Paper API</span>
+        <span class="tok-var">val</span> target = Location(world, x.toDouble(), (y + <span class="tok-num">1</span>).toDouble(), z.toDouble())
+
+        <span class="tok-com">// EntityScheduler — an toàn với Folia</span>
+        sender.scheduler.run {
+            sender.teleport(target)
+            sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;Đã dịch chuyển đến $x, $z!"</span>)
+        }
+    }
+}</code></pre>
+
+    <h3 id="vd3">Ví dụ 3 — Broadcast định kỳ</h3>
+    <p>Mỗi 30 giây gửi một thông báo xoay vòng. Dùng <code>server.sendRichMessage</code> và <code>BukkitScheduler</code> (chỉ chạy không-Folia; nếu dùng Folia hãy chuyển sang <code>globalRegionScheduler</code>).</p>
+    <pre><code><span class="tok-com">// auto_announce.kite.kts</span>
+<span class="tok-var">val</span> announcements = <span class="tok-fn">listOf</span>(
+    <span class="tok-str">"&lt;gold&gt;💡 Mẹo: &lt;white&gt;Nhấn &lt;yellow&gt;Ctrl+F&lt;/white&gt; để tìm kiếm trên web."</span>,
+    <span class="tok-str">"&lt;gold&gt;💡 Mẹo: &lt;white&gt;Sử dụng &lt;yellow&gt;/help&lt;/white&gt; để xem danh sách lệnh."</span>,
+    <span class="tok-str">"&lt;gold&gt;💡 Mẹo: &lt;white&gt;Tham gia Discord của chúng tôi!"</span>
+)
+<span class="tok-var">var</span> index = <span class="tok-num">0</span>
+
+<span class="tok-kw">onLoad</span> {
+    server.scheduler.runTaskTimer(delayTicks = <span class="tok-num">20</span> * <span class="tok-num">5</span>, periodTicks = <span class="tok-num">20</span> * <span class="tok-num">30</span>) {
+        server.sendRichMessage(announcements[index])
+        index = (index + <span class="tok-num">1</span>) % announcements.size
+    }
+    server.sendRichMessage(<span class="tok-str">"&lt;green&gt;✓ Auto-announce đã bật."</span>)
+}
+
+<span class="tok-kw">onUnload</span> {
+    server.sendRichMessage(<span class="tok-str">"&lt;red&gt;✕ Auto-announce đã tắt."</span>)
+}</code></pre>
+
+    <h3 id="vd4">Ví dụ 4 — Gọi API plugin khác (PlaceholderAPI)</h3>
+    <p>Import tường minh vì không phải API Bukkit/Paper. Gửi kết quả bằng Adventure.</p>
+    <pre><code><span class="tok-com">// papi.kite.kts</span>
+<span class="tok-ann">@file:Repository</span>(<span class="tok-str">"https://repo.extendedclip.com/releases/"</span>)
+<span class="tok-ann">@file:Dependency</span>(<span class="tok-str">"me.clip:placeholderapi:2.11.7"</span>)
+
+<span class="tok-kw">import</span> me.clip.placeholderapi.PlaceholderAPI
+
+command(<span class="tok-str">"stats"</span>) {
+    permission = <span class="tok-str">"scripts.stats"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">is</span> <span class="tok-cls">Player</span>) {
+            <span class="tok-var">val</span> uptime = PlaceholderAPI.setPlaceholders(sender, <span class="tok-str">"%server_uptime%"</span>)
+            <span class="tok-var">val</span> pings  = PlaceholderAPI.setPlaceholders(sender, <span class="tok-str">"%player_ping%"</span>)
+            sender.sendRichMessage(<span class="tok-str">"&lt;yellow&gt;Uptime: &lt;white&gt;$uptime\n&lt;yellow&gt;Ping: &lt;white&gt;$pings ms"</span>)
+        }
+    }
+}</code></pre>
+
+    <h3 id="vd5">Ví dụ 5 — HTTP request bất đồng bộ</h3>
+    <p>Tra cứu quốc gia theo IP. Dùng <code>AsyncScheduler</code> để không chặn main thread.</p>
+    <pre><code><span class="tok-com">// country.kite.kts</span>
+<span class="tok-kw">import</span> java.net.URI
+<span class="tok-kw">import</span> java.net.http.HttpClient
+<span class="tok-kw">import</span> java.net.http.HttpRequest
+<span class="tok-kw">import</span> java.net.http.HttpResponse
+
+<span class="tok-var">val</span> httpClient = HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(<span class="tok-num">5</span>)).build()
+
+command(<span class="tok-str">"country"</span>) {
+    permission = <span class="tok-str">"scripts.country"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">is</span> <span class="tok-cls">Player</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Đang tra cứu quốc gia của bạn..."</span>)
+            server.asyncScheduler.runNow {
+                <span class="tok-kw">try</span> {
+                    <span class="tok-var">val</span> ip = sender.address.address.hostAddress
+                    <span class="tok-var">val</span> req = HttpRequest.newBuilder().GET().uri(URI(<span class="tok-str">"https://get.geojs.io/v1/ip/country/full/$ip"</span>)).build()
+                    <span class="tok-var">val</span> country = httpClient.send(req, HttpResponse.BodyHandlers.ofString()).body().trim()
+                    sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;Quốc gia: &lt;yellow&gt;$country"</span>)
+                } <span class="tok-kw">catch</span> (e: Exception) {
+                    sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Không tra cứu được: &lt;white&gt;${e.message}"</span>)
+                }
+            }
+        }
+    }
+}</code></pre>
+
+    <h3 id="vd6">Ví dụ 6 — Đa file + tự tải thư viện (Caffeine)</h3>
+    <p>Dự án đa file, dùng thư viện cache Caffeine tải từ Maven, kết hợp Adventure để gửi message.</p>
+
+    <p><strong>File 1:</strong> <span class="file-path">plugins/Kite/scripts/cache_demo/helpers.kite.kts</span></p>
+    <pre><code><span class="tok-com">// helpers.kite.kts</span>
+<span class="tok-kw">fun</span> <span class="tok-fn">greet</span>(playerName: String): String = <span class="tok-str">"Xin chào $playerName! 👋"</span></code></pre>
+
+    <p><strong>File 2:</strong> <span class="file-path">plugins/Kite/scripts/cache_demo/main.kite.kts</span></p>
+    <pre><code><span class="tok-com">// main.kite.kts (entry point của cache_demo)</span>
+<span class="tok-ann">@file:Repository</span>(<span class="tok-str">"https://maven-central.storage-download.googleapis.com/maven2"</span>)
+<span class="tok-ann">@file:Dependency</span>(<span class="tok-str">"com.github.ben-manes.caffeine:caffeine:3.2.3"</span>)
+<span class="tok-ann">@file:Import</span>(<span class="tok-str">"helpers.kite.kts"</span>)
+
+<span class="tok-kw">import</span> com.github.benmanes.caffeine.cache.Caffeine
+
+<span class="tok-var">val</span> cache = Caffeine.newBuilder()
+    .expireAfterWrite(java.time.Duration.ofMinutes(<span class="tok-num">5</span>))
+    .build&lt;String, String&gt;()
+
+command(<span class="tok-str">"greet"</span>) {
+    permission = <span class="tok-str">"scripts.greet"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-var">val</span> name = args.firstOrNull() ?: sender.name
+        <span class="tok-var">val</span> cached = cache.getIfPresent(name)
+        <span class="tok-kw">if</span> (cached != <span class="tok-cm">null</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;gray&gt;(cache) $cached"</span>)
+        } <span class="tok-kw">else</span> {
+            <span class="tok-var">val</span> message = <span class="tok-fn">greet</span>(name)
+            cache.put(name, message)
+            sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;$message"</span>)
+        }
+    }
+}</code></pre>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Lưu ý thư mục đa file</div>
+      <p>Thư mục con phải có <span class="file-path">main.kite.kts</span> làm entry point. Nếu hai thư mục có file cùng tên, khai báo <code>package</code> để tránh lỗi trùng class (xem <a href="#troubleshooting">mục 14.3</a>).</p>
+    </div>
+
+    <h3 id="vd7">Ví dụ 7 — Kit (lệnh cấp trang bị)</h3>
+    <p>Lệnh <span class="cmd">/kit</span> cấp các bộ trang bị theo tên, kèm gợi ý tab tự động. Item dùng <code>Material</code>, message dùng Adventure.</p>
+    <pre><code><span class="tok-com">// kit.kite.kts</span>
+<span class="tok-kw">import</span> org.bukkit.Material
+<span class="tok-kw">import</span> org.bukkit.inventory.ItemStack
+
+<span class="tok-var">val</span> kits = mapOf(
+    <span class="tok-str">"starter"</span> to <span class="tok-fn">listOf</span>(
+        ItemStack(Material.<span class="tok-cls">STONE_SWORD</span>),
+        ItemStack(Material.<span class="tok-cls">COOKED_BEEF</span>, <span class="tok-num">16</span>),
+        ItemStack(Material.<span class="tok-cls">LEATHER_HELMET</span>)
+    ),
+    <span class="tok-str">"diamond"</span> to <span class="tok-fn">listOf</span>(
+        ItemStack(Material.<span class="tok-cls">DIAMOND_SWORD</span>),
+        ItemStack(Material.<span class="tok-cls">DIAMOND_CHESTPLATE</span>),
+        ItemStack(Material.<span class="tok-cls">GOLDEN_APPLE</span>, <span class="tok-num">4</span>)
+    )
+)
+
+command(<span class="tok-str">"kit"</span>) {
+    description = <span class="tok-str">"Cấp kit cho người chơi."</span>
+    permission = <span class="tok-str">"scripts.kit"</span>
+    usage = <span class="tok-str">"/kit &lt;starter|diamond&gt;"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Chỉ người chơi mới dùng được lệnh này."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        <span class="tok-var">val</span> kit = args.firstOrNull() ?: <span class="tok-str">"starter"</span>
+        <span class="tok-var">val</span> items = kits[kit]
+        <span class="tok-kw">if</span> (items == <span class="tok-cm">null</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Kit '&lt;yellow&gt;$kit&lt;/red&gt;' không tồn tại. Có: &lt;yellow&gt;${kits.keys.joinToString(", ")}"</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        items.forEach { sender.inventory.addItem(it) }
+        sender.sendRichMessage(<span class="tok-str">"&lt;green&gt;Đã nhận kit &lt;yellow&gt;$kit&lt;/green&gt;! 🎒"</span>)
+    }
+    tabComplete { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">return@tabComplete</span> kits.keys.filter { it.startsWith(args.lastOrNull() ?: <span class="tok-str">""</span>) }
+    }
+}</code></pre>
+
+    <h3 id="vd8">Ví dụ 8 — Rank (prefix theo quyền)</h3>
+    <p>Gán prefix cho người chơi dựa trên <strong>permission node</strong> (<code>rank.vip</code>, <code>rank.mvp</code>, <code>rank.admin</code>). Hiển thị khi vào server và khi chạy lệnh <span class="cmd">/rank</span>.</p>
+    <pre><code><span class="tok-com">// rank.kite.kts</span>
+<span class="tok-var">val</span> ranks = linkedMapOf(
+    <span class="tok-str">"vip"</span>   to <span class="tok-str">"&lt;gold&gt;[VIP] "</span>,
+    <span class="tok-str">"mvp"   to <span class="tok-str">"&lt;light_purple&gt;[MVP] "</span>,
+    <span class="tok-str">"admin" to <span class="tok-str">"&lt;red&gt;[ADMIN] "</span>
+)
+
+<span class="tok-com">// Hàm tìm rank của player theo permission node</span>
+<span class="tok-kw">fun</span> <span class="tok-fn">getRank</span>(player: <span class="tok-cls">Player</span>): String? = ranks.keys.find { player.hasPermission(<span class="tok-str">"rank.$it"</span>) }
+
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> prefix = <span class="tok-fn">getRank</span>(event.player)?.let { ranks[it] } ?: <span class="tok-str">""</span>
+    event.player.sendRichMessage(<span class="tok-str">"$prefix&lt;gray&gt;Xin chào ${event.player.name}!"</span>)
+}
+
+command(<span class="tok-str">"rank"</span>) {
+    permission = <span class="tok-str">"scripts.rank"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) <span class="tok-kw">return@execute</span>
+        <span class="tok-var">val</span> rank = <span class="tok-fn">getRank</span>(sender)
+        <span class="tok-kw">if</span> (rank == <span class="tok-cm">null</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Bạn chưa có rank."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        sender.sendRichMessage(<span class="tok-str">"${ranks[rank]}&lt;green&gt;Rank của bạn: &lt;yellow&gt;$rank"</span>)
+    }
+}</code></pre>
+
+    <h3 id="vd9">Ví dụ 9 — Warp menu (GUI Inventory)</h3>
+    <p>Mở một <strong>GUI 9×3</strong> chứa các nút warp. Click vào item sẽ đóng menu và dịch chuyển người chơi. Dùng Adventure để đặt tên item và title menu.</p>
+    <pre><code><span class="tok-com">// warpmenu.kite.kts</span>
+<span class="tok-kw">import</span> org.bukkit.Bukkit
+<span class="tok-kw">import</span> org.bukkit.Location
+<span class="tok-kw">import</span> org.bukkit.Material
+<span class="tok-kw">import</span> org.bukkit.inventory.Inventory
+<span class="tok-kw">import</span> org.bukkit.inventory.ItemStack
+<span class="tok-kw">import</span> org.bukkit.event.inventory.InventoryClickEvent
+<span class="tok-kw">import</span> net.kyori.adventure.text.Component
+<span class="tok-kw">import</span> net.kyori.adventure.text.format.NamedTextColor
+
+data <span class="tok-cls">class</span> Warp(<span class="tok-var">val</span> label: String, <span class="tok-var">val</span> material: Material, <span class="tok-var">val</span> x: Int, <span class="tok-var">val</span> z: Int)
+
+<span class="tok-var">val</span> warps = <span class="tok-fn">listOf</span>(
+    Warp(<span class="tok-str">"Spawn"</span>, Material.<span class="tok-cls">RED_BED</span>, <span class="tok-num">0</span>, <span class="tok-num">0</span>),
+    Warp(<span class="tok-str">"Mine"</span>, Material.<span class="tok-cls">STONE_PICKAXE</span>, <span class="tok-num">100</span>, -<span class="tok-num">50</span>),
+    Warp(<span class="tok-str">"Farm"</span>, Material.<span class="tok-cls">WHEAT</span>, -<span class="tok-num">200</span>, <span class="tok-num">80</span>)
+)
+
+<span class="tok-kw">val</span> menuTitle = Component.text(<span class="tok-str">"Warp Menu"</span>).color(NamedTextColor.<span class="tok-cls">GOLD</span>)
+
+<span class="tok-kw">fun</span> <span class="tok-fn">teleportToWarp</span>(player: <span class="tok-cls">Player</span>, warp: Warp) {
+    <span class="tok-var">val</span> y = player.world.getHighestBlockYAt(warp.x, warp.z)
+    <span class="tok-var">val</span> loc = Location(player.world, warp.x + <span class="tok-num">0.5</span>, (y + <span class="tok-num">1</span>).toDouble(), warp.z + <span class="tok-num">0.5</span>)
+    player.scheduler.run {   <span class="tok-com">// EntityScheduler, Folia-safe</span>
+        player.teleport(loc)
+        player.sendRichMessage(<span class="tok-str">"&lt;green&gt;Đã dịch chuyển đến &lt;yellow&gt;${warp.label}&lt;/green&gt;!"</span>)
+    }
+}
+
+command(<span class="tok-str">"warp"</span>) {
+    description = <span class="tok-str">"Mở menu warp."</span>
+    permission = <span class="tok-str">"scripts.warp"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Chỉ người chơi dùng được lệnh này."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        <span class="tok-var">val</span> target = args.firstOrNull()?.lowercase()
+        <span class="tok-kw">if</span> (target != <span class="tok-cm">null</span>) {
+            <span class="tok-var">val</span> warp = warps.find { it.label.lowercase() == target }
+            <span class="tok-kw">if</span> (warp != <span class="tok-cm">null</span>) { <span class="tok-fn">teleportToWarp</span>(sender, warp); <span class="tok-kw">return@execute</span> }
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Warp '&lt;yellow&gt;$target&lt;/red&gt;' không tồn tại."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        <span class="tok-fn">openWarpMenu</span>(sender)
+    }
+}
+
+<span class="tok-kw">fun</span> <span class="tok-fn">openWarpMenu</span>(player: <span class="tok-cls">Player</span>) {
+    <span class="tok-var">val</span> inv: Inventory = Bukkit.createInventory(<span class="tok-cm">null</span>, <span class="tok-num">9</span> * <span class="tok-num">3</span>, menuTitle)
+    warps.forEachIndexed { i, warp <span class="tok-kw">-&gt;</span>
+        <span class="tok-var">val</span> icon = ItemStack(warp.material)
+        icon.editMeta { displayName(Component.text(warp.label).color(NamedTextColor.<span class="tok-cls">GREEN</span>)) }
+        inv.setItem(i, icon)
+    }
+    player.openInventory(inv)
+}
+
+<span class="tok-kw">on</span>&lt;InventoryClickEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-kw">if</span> (event.view.title() != menuTitle) <span class="tok-kw">return@on</span>
+    event.isCancelled = <span class="tok-cm">true</span>
+    <span class="tok-var">val</span> player = event.whoClicked <span class="tok-kw">as?</span> <span class="tok-cls">Player</span> ?: <span class="tok-kw">return@on</span>
+    <span class="tok-var">val</span> slot = event.rawSlot
+    <span class="tok-kw">if</span> (slot <span class="tok-kw">in</span> warps.indices) {
+        player.closeInventory()
+        <span class="tok-fn">teleportToWarp</span>(player, warps[slot])
+    }
+}</code></pre>
+
+    <h3 id="vd10">Ví dụ 10 — Fly toggle</h3>
+    <p>Lệnh <span class="cmd">/fly</span> bật/tắt bay. Dùng property <code>isFlying</code> và Adventure để báo trạng thái.</p>
+    <pre><code><span class="tok-com">// fly.kite.kts</span>
+command(<span class="tok-str">"fly"</span>) {
+    description = <span class="tok-str">"Bật/tắt chế độ bay."</span>
+    permission = <span class="tok-str">"scripts.fly"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) {
+            sender.sendRichMessage(<span class="tok-str">"&lt;red&gt;Chỉ người chơi dùng được lệnh này."</span>)
+            <span class="tok-kw">return@execute</span>
+        }
+        sender.isFlying = !sender.isFlying
+        sender.sendRichMessage(
+            <span class="tok-str">"&lt;green&gt;Chế độ bay: &lt;${if (sender.isFlying) "green" else "red"}&gt;${if (sender.isFlying) "BẬT" else "TẮT"} ✈️"</span>
+        )
+    }
+}</code></pre>
+
+    <h3 id="vd11">Ví dụ 11 — PvP toggle theo từng người chơi</h3>
+    <p>Mỗi người chơi tự bật/tắt PvP của mình. Nếu một trong hai bên tắt PvP thì hủy sát thương.</p>
+    <pre><code><span class="tok-com">// pvp.kite.kts</span>
+<span class="tok-kw">import</span> org.bukkit.event.entity.EntityDamageByEntityEvent
+
+<span class="tok-com">// Lưu tên những player đang bật PvP</span>
+<span class="tok-var">val</span> pvpEnabled = mutableSetOf&lt;String&gt;()
+
+command(<span class="tok-str">"pvp"</span>) {
+    description = <span class="tok-str">"Bật/tắt PvP của bản thân."</span>
+    permission = <span class="tok-str">"scripts.pvp"</span>
+    execute { sender, args <span class="tok-kw">-&gt;</span>
+        <span class="tok-kw">if</span> (sender <span class="tok-kw">!is</span> <span class="tok-cls">Player</span>) <span class="tok-kw">return@execute</span>
+        <span class="tok-var">val</span> name = sender.name
+        <span class="tok-var">val</span> on = <span class="tok-kw">if</span> (name <span class="tok-kw">in</span> pvpEnabled) { pvpEnabled.remove(name); <span class="tok-cm">false</span> } <span class="tok-kw">else</span> { pvpEnabled.add(name); <span class="tok-cm">true</span> }
+        sender.sendRichMessage(
+            <span class="tok-str">"&lt;gold&gt;PvP: &lt;${if (on) "green" else "red"}&gt;${if (on) "BẬT" else "TẮT"} ⚔️"</span>
+        )
+    }
+}
+
+<span class="tok-kw">on</span>&lt;EntityDamageByEntityEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> damager = event.damager <span class="tok-kw">as?</span> <span class="tok-cls">Player</span> ?: <span class="tok-kw">return@on</span>
+    <span class="tok-var">val</span> victim  = event.entity <span class="tok-kw">as?</span> <span class="tok-cls">Player</span> ?: <span class="tok-kw">return@on</span>
+    <span class="tok-kw">if</span> (damager.name <span class="tok-kw">!in</span> pvpEnabled || victim.name <span class="tok-kw">!in</span> pvpEnabled) {
+        event.isCancelled = <span class="tok-cm">true</span>
+        damager.sendRichMessage(<span class="tok-str">"&lt;red&gt;PvP đang tắt — không thể gây sát thương lẫn nhau!"</span>)
+    }
+}</code></pre>
+
+    <h3 id="vd12">Ví dụ 12 — Tương tác NPC với FancyNpcs</h3>
+    <p>Lắng nghe <strong>event tương tác NPC của plugin FancyNpcs</strong> (<code>NpcInteractEvent</code>) để chạy hành động khi người chơi click vào NPC. Vì là API của plugin khác, bạn phải <strong>import tường minh</strong>. <strong>Không cần khai báo version</strong> — xem giải thích bên dưới.</p>
+
+    <div class="callout success">
+      <div class="ttl">💡 Vì sao không cần version?</div>
+      <ul style="margin:0">
+        <li><strong>FancyNpcs đã cài trên server</strong> → Kite truy cập thẳng classes của plugin đang chạy qua classpath, nên <strong>không cần <code>@file:Dependency</code></strong> (và không cần version).</li>
+        <li><code>@file:Dependency</code> chỉ bắt buộc cho <strong>thư viện chưa có trên server</strong> (Caffeine, HTTP client…) — lúc đó Maven mới cần version để tải artifact.</li>
+        <li>Placeholder <code>{version}</code> <strong>không</strong> hoạt động trong annotation (chuỗi tĩnh) — nó chỉ có tác dụng trong Gradle build script.</li>
+        <li>Bạn chỉ cần khai báo <span class="file-path">build.gradle.kts</span> dạng <code>compileOnly</code> để <strong>IDE gợi ý code</strong>, không phải để chạy.</li>
+      </ul>
+    </div>
+
+    <div class="callout note">
+      <div class="ttl">📦 Chuẩn bị</div>
+      <ul style="margin:0">
+        <li>Cài plugin <strong>FancyNpcs</strong> trên server (Paper 1.21.11).</li>
+        <li>Tạo NPC bằng <span class="cmd">/npc create &lt;tên&gt;</span>.</li>
+        <li>Dùng đúng <strong>version API tương ứng</strong> bản FancyNpcs server đang chạy trong <span class="file-path">build.gradle.kts</span>.</li>
+      </ul>
+    </div>
+
+    <pre><code><span class="tok-com">// npc.kite.kts — không cần @file:Dependency vì FancyNpcs đã có trên server</span>
+<span class="tok-kw">import</span> de.oliver.fancynpcs.api.events.NpcInteractEvent
+
+<span class="tok-kw">on</span>&lt;NpcInteractEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player          <span class="tok-com">// người chơi click</span>
+    <span class="tok-var">val</span> npcName = event.npc.data.name  <span class="tok-com">// tên NPC bị click</span>
+
+    <span class="tok-kw">when</span> (npcName) {
+        <span class="tok-str">"shop"</span> -&gt; {
+            player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;🛒 Chào mừng đến cửa hàng!"</span>)
+            <span class="tok-com">// mở GUI shop, gọi plugin economy... tại đây</span>
+        }
+        <span class="tok-str">"quest"</span> -&gt; player.sendRichMessage(<span class="tok-str">"&lt;green&gt;📜 Bạn đã bắt đầu nhiệm vụ!"</span>)
+        <span class="tok-str">"heal"</span> -&gt; {
+            player.health = player.maxHealth
+            player.sendRichMessage(<span class="tok-str">"&lt;green&gt;💖 NPC đã hồi máu cho bạn!"</span>)
+        }
+        <span class="tok-kw">else</span> -&gt; player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Bạn tương tác với NPC &lt;yellow&gt;&lt;bold&gt;$npcName"</span>)
+    }
+}</code></pre>
+
+    <p><strong>Chỉ để IDE gợi ý code,</strong> thêm vào <span class="file-path">build.gradle.kts</span> — dùng <code>compileOnly</code> (không đóng gói, vì plugin đã có trên server):</p>
+    <pre><code>repositories {
+    maven { url = uri(<span class="tok-str">"https://repo.fancyinnovations.com/releases"</span>) }
+}
+dependencies {
+    compileOnly(<span class="tok-str">"de.oliver:FancyNpcs:2.10.0.356"</span>)   <span class="tok-com">// version khớp bản FancyNpcs trên server</span>
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">💡 Ghi chú</div>
+      <ul style="margin:0">
+        <li>Nếu cần tên NPC để so sánh với id trong config, dùng <code>event.npc.data.name</code> (id NPC FancyNpcs).</li>
+        <li>Muốn phân biệt click chuột trái/phải, dùng property <code>event.clickType</code> của event.</li>
+        <li>Bạn có thể kết hợp <code>when</code> với nhiều hành động: mở GUI, trao item, gọi Vault/PlaceholderAPI…</li>
+      </ul>
+    </div>
+
+    <h4>Check permission + gửi message từ message.yml</h4>
+    <p>Nâng cấp: khi click NPC, <strong>check quyền</strong> (<code>player.hasPermission(...)</code>). Nếu <strong>chưa có quyền</strong> thì load message từ file <code>message.yml</code> (đã tạo ở <a href="#vd14">Ví dụ 14</a>) và gửi cho người chơi. Message có thể là <strong>1 dòng</strong> hoặc <strong>nhiều dòng</strong> — dùng key <code>lines:</code> để khai báo danh sách.</p>
+
+    <div class="callout success">
+      <div class="ttl">💡 Dùng chung message.yml với các script khác</div>
+      <p style="margin:0">Vì <code>message.yml</code> nằm trên đĩa, <strong>bất kỳ script nào cũng đọc được</strong> bằng cùng pattern <code>YamlConfiguration.loadConfiguration(File(scriptFile, "message.yml"))</code> — <strong>không cần gọi hàm từ script khác</strong>. Mỗi script tự load file khi <code>onLoad</code> là cách đơn giản và chắc chắn nhất.</p>
+    </div>
+
+    <p>Thêm vào <span class="file-path">message.yml</span> (từ Ví dụ 14) các key liên quan NPC:</p>
+    <pre><code><span class="tok-com"># message.yml — thêm phần này</span>
+npc:
+  no_perm: <span class="tok-str">"&lt;red&gt;⛔ Bạn chưa có quyền dùng NPC này!"</span>
+  no_perm_lines:            <span class="tok-com"># dạng nhiều dòng (block)</span>
+    - <span class="tok-str">"&lt;red&gt;⛔ Không đủ quyền."</span>
+    - <span class="tok-str">"&lt;gray&gt;Cần quyền &lt;yellow&gt;vip.npc.shop"</span>
+    - <span class="tok-str">"&lt;gray&gt;Liên hệ admin để mua VIP."</span>
+  deny_perm: <span class="tok-str">"&lt;gold&gt;&lt;bold&gt;✋</span> <span class="tok-str">&lt;gold&gt;NPC tạm khóa"</span></code></pre>
+
+    <pre><code><span class="tok-com">// npc_perm.kite.kts — check quyền + gửi message từ message.yml</span>
+<span class="tok-kw">import</span> de.oliver.fancynpcs.api.events.NpcInteractEvent
+<span class="tok-kw">import</span> org.bukkit.configuration.file.YamlConfiguration
+<span class="tok-kw">import</span> java.io.File
+
+<span class="tok-com">// Load message.yml nằm cạnh script (giống Ví dụ 14):</span>
+<span class="tok-var">val</span> msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+<span class="tok-kw">on</span>&lt;NpcInteractEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player
+    <span class="tok-var">val</span> npcName = event.npc.data.name
+
+    <span class="tok-com">// Chỉ check quyền cho NPC "shop" (đổi tùy bạn)</span>
+    <span class="tok-kw">if</span> (npcName == <span class="tok-str">"shop"</span>) {
+        <span class="tok-kw">if</span> (player.hasPermission(<span class="tok-str">"vip.npc.shop"</span>)) {
+            <span class="tok-com">// ✅ CÓ quyền → thực thi actions / lệnh</span>
+            player.sendRichMessage(<span class="tok-str">"&lt;green&gt;🛒 Chào mừng VIP!"</span>)
+            <span class="tok-com">// player tự chạy lệnh (mở GUI shop, gọi economy...):</span>
+            player.performCommand(<span class="tok-str">"shop"</span>)
+            <span class="tok-com">// console chạy lệnh (trao quyền, gửi quà, teleport...):</span>
+            server.dispatchCommand(server.consoleSender, <span class="tok-str">"lp user ${player.name} permission set vip.gift true"</span>)
+            server.dispatchCommand(server.consoleSender, <span class="tok-str">"give ${player.name} diamond 5"</span>)
+            <span class="tok-com">// các action khác: hồi máu, cấp item, đổi gamemode... tùy bạn</span>
+            player.health = player.maxHealth
+            player.inventory.addItem(ItemStack(Material.GOLDEN_APPLE, <span class="tok-num">1</span>))
+        } <span class="tok-kw">else</span> {
+            <span class="tok-com">// ❌ CHƯA quyền → gửi message từ message.yml</span>
+            sendNpcMessage(player, <span class="tok-str">"npc.no_perm_lines"</span>)
+        }
+    }
+}
+
+<span class="tok-com">// Gửi message: 1 dòng (String) hoặc nhiều dòng (List), tự nhận diện</span>
+<span class="tok-fn">fun</span> sendNpcMessage(player: Player, path: String) {
+    <span class="tok-var">val</span> obj = msg.get(path) <span class="tok-kw">?:</span> <span class="tok-kw">return</span>
+    <span class="tok-kw">when</span> (obj) {
+        <span class="tok-kw">is</span> String -&gt; player.sendRichMessage(obj)              <span class="tok-com">// 1 dòng</span>
+        <span class="tok-kw">is</span> List&lt;*&gt; -&gt; obj.filterIsInstance&lt;String&gt;()
+            .forEach { player.sendRichMessage(it) }          <span class="tok-com">// block nhiều dòng</span>
+    }
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">💡 Giải thích</div>
+      <ul style="margin:0">
+        <li><code>player.hasPermission("vip.npc.shop")</code> — trả về <code>true/false</code> dựa trên quyền hiện có của player (bao gồm cả quyền từ group/plugin quản lý quyền như LuckPerms).</li>
+        <li><strong>Có quyền → chạy actions:</strong> gửi message, <code>player.performCommand("shop")</code> (player tự chạy lệnh) hoặc <code>server.dispatchCommand(server.consoleSender, "...")</code> (console chạy lệnh — trao quyền, gửi quà, teleport…). Bạn có thể viết thêm <code>when (npcName)</code> để NPC "shop" / "quest" / "heal" mỗi cái có chuỗi actions riêng.</li>
+        <li>Hàm <code>sendNpcMessage</code> nhận diện tự động: nếu value là <code>String</code> → gửi 1 dòng; nếu là <code>List</code> → gửi từng dòng (block nhiều line). Nhờ vậy cùng 1 hàm dùng được cho cả 2 dạng.</li>
+        <li><code>msg.get(path)</code> trả về <code>Any?</code>, nên dùng <code>is String</code> / <code>is List&lt;*&gt;</code> để rẽ nhánh an toàn kiểu.</li>
+        <li>Đổi <code>npc.no_perm_lines</code> → <code>npc.no_perm</code> để gửi message 1 dòng thay vì block.</li>
+      </ul>
+    </div>
+
+    <h3 id="vd13">Ví dụ 13 — Bắt Custom Event của plugin khác</h3>
+    <p>Ngoài event Bukkit/Paper, script có thể bắt <strong>event tùy biến do plugin khác call</strong>. Ví dụ: sau khi login thành công, plugin của bạn gọi <code>PlayerAuthSuccessEvent</code> → script bắt event đó và chạy các actions / commands.</p>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Điều kiện để bắt được custom event</div>
+      <ul style="margin:0">
+        <li>Class event phải <strong>extends <code>org.bukkit.event.Event</code></strong> — class bạn đã viết là đạt chuẩn.</li>
+        <li>Plugin phải <strong>gọi event</strong> bằng <code>Bukkit.getPluginManager().callEvent(event)</code> ở đúng thời điểm.</li>
+        <li><strong>Import tường minh</strong> class event (gói không tự import): <code>import me.ipapervn.modules.login.PlayerAuthSuccessEvent</code>.</li>
+        <li><strong>Không cần version</strong> — plugin đã cài trên server, Kite truy cập thẳng class của nó qua classpath.</li>
+      </ul>
+    </div>
+
+    <h4>Script mẫu: JOIN → LOGIN THÀNH CÔNG → chạy commands</h4>
+    <pre><code><span class="tok-com">// auth_flow.kite.kts — đặt vào plugins/Kite/scripts/</span>
+<span class="tok-kw">import</span> me.ipapervn.modules.login.PlayerAuthSuccessEvent   <span class="tok-com">// event plugin của bạn</span>
+
+<span class="tok-com">// 1) Player vừa JOIN (event Bukkit chuẩn, tự động có)</span>
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player
+    player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;🔐 Vui lòng đăng nhập: &lt;yellow&gt;/login &lt;mật_khẩu&gt;"</span>)
+
+    <span class="tok-com">// VD: console chạy lệnh — đặt player về spectator chờ xác thực:</span>
+    server.dispatchCommand(server.consoleSender, <span class="tok-str">"gamemode spectator ${player.name}"</span>)
+    <span class="tok-com">// có thể gọi lệnh plugin khác, vd ẩn danh / bảo vệ spawn...</span>
+    <span class="tok-com">// actions trước khác: lưu vị trí, ẩn danh, set gamemode... tùy bạn</span>
+}
+
+<span class="tok-com">// 2) LOGIN THÀNH CÔNG → chạy actions / commands</span>
+<span class="tok-kw">on</span>&lt;PlayerAuthSuccessEvent&gt; { event <span class="tok-kw">-&gt;</span>
+    <span class="tok-var">val</span> player = event.player
+    player.sendRichMessage(<span class="tok-str">"&lt;green&gt;✅ Đăng nhập thành công! Chào mừng &lt;gold&gt;${player.name}"</span>)
+
+    player.performCommand(<span class="tok-str">"spawn"</span>)                                            <span class="tok-com">// player tự chạy lệnh</span>
+    server.dispatchCommand(server.consoleSender, <span class="tok-str">"give ${player.name} diamond 1"</span>)   <span class="tok-com">// console chạy lệnh</span>
+    server.dispatchCommand(server.consoleSender, <span class="tok-str">"lp user ${player.name} parent add member"</span>)
+
+    player.showTitle(Title.title(
+        Component.text(<span class="tok-str">"Chào mừng!"</span>).color(NamedTextColor.<span class="tok-cls">GOLD</span>),
+        Component.text(player.name).color(NamedTextColor.<span class="tok-cls">YELLOW</span>)
+    ))
+    player.inventory.addItem(ItemStack(Material.<span class="tok-cls">GOLDEN_APPLE</span>, <span class="tok-num">1</span>))
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">💡 Chạy lệnh trong Kite</div>
+      <ul style="margin:0">
+        <li><code>player.performCommand("...")</code> — người chơi tự chạy lệnh.</li>
+        <li><code>server.dispatchCommand(server.consoleSender, "...")</code> — <strong>console chạy lệnh</strong> (cấp quyền, trao item, lệnh admin).</li>
+        <li>Chèn biến vào chuỗi lệnh: <code>"give ${player.name} diamond 1"</code>.</li>
+      </ul>
+    </div>
+
+    <h4>Về phía plugin — cần đúng 2 điều</h4>
+    <ul>
+      <li><strong>Class event hợp lệ:</strong> extends <code>Event</code> và có <code>getHandlers()</code> — class <code>PlayerAuthSuccessEvent</code> bạn viết đã đạt chuẩn.</li>
+      <li><strong>Gọi event khi login thành công:</strong>
+        <pre><code>Bukkit.getPluginManager().callEvent(PlayerAuthSuccessEvent(player))</code></pre>
+      </li>
+    </ul>
+
+    <div class="callout note">
+      <div class="ttl">💡 Lưu ý</div>
+      <ul style="margin:0">
+        <li><code>on&lt;Event&gt;</code> tự đăng ký/hủy listener theo vòng đời script — <strong>không cần tự quản lý listener</strong>.</li>
+        <li>Muốn chạy thêm actions <strong>trước khi login thành công</strong>, dùng <code>on&lt;PlayerJoinEvent&gt;</code> (đã có trong ví dụ) — <strong>không cần thêm class/event nào trong plugin</strong>.</li>
+        <li>Muốn sắp thứ tự giữa các listener cùng 1 event, dùng <code>priority = EventPriority.HIGHEST/LOWEST</code>.</li>
+      </ul>
+    </div>
+
+    <h3 id="vd14">Ví dụ 14 — Tạo &amp; đọc file (message.yml)</h3>
+    <p>Kite cho phép bạn thao tác trực tiếp với <strong>file trên ổ đĩa</strong> bằng Kotlin/Java API chuẩn. Cách phổ biến nhất: dùng file <strong>YAML</strong> (<code>message.yml</code>, <code>config.yml</code>, <code>lang/vi.yml</code>…) để chứa thông điệp/khai báo mà <strong>nhiều script cùng dùng chung</strong>. Nhờ đó bạn đổi nội dung mà <strong>không cần sửa code</strong> — chỉ sửa file rồi reload.</p>
+
+    <h4>1) Tạo file message.yml (đặt ở <span class="file-path">plugins/Kite/scripts/message.yml</span>)</h4>
+    <pre><code><span class="tok-com"># ===== message.yml =====</span>
+join:
+  welcome: <span class="tok-str">"&lt;gold&gt;Chào mừng &lt;yellow&gt;{player}&lt;gold&gt; đến server! 🎉"</span>
+  tip: <span class="tok-str">"&lt;gray&gt;Mẹo: gõ &lt;green&gt;/help&lt;/green&gt; để xem lệnh."</span>
+death:
+  message: <span class="tok-str">"&lt;red&gt;💀 {player} đã tử vong bởi {killer}"</span>
+reward:
+  daily: <span class="tok-str">"&lt;green&gt;✅ Nhận quà hằng ngày: {amount} 🌟"</span>
+reload:
+  done: <span class="tok-str">"&lt;green&gt;Đã reload message.yml"</span></code></pre>
+
+    <h4>2) Script đọc file — <span class="file-path">message_loader.kite.kts</span></h4>
+    <p>Dùng <code>YamlConfiguration</code> (có sẵn trong Paper, <strong>không cần thêm thư viện</strong>) để nạp file thành object rồi truy cập theo path. File nằm cạnh script nên dùng <code>File(scriptFile, "message.yml")</code>:</p>
+    <pre><code><span class="tok-com">// message_loader.kite.kts</span>
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+
+<span class="tok-com">// File message.yml nằm CÙNG thư mục script:</span>
+val msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+fun sendJoin(player: Player) {
+    val welcome = msg.getString(<span class="tok-str">"join.welcome"</span>)!!.replace(<span class="tok-str">"{player}"</span>, player.name)
+    player.sendRichMessage(welcome)
+    player.sendRichMessage(msg.getString(<span class="tok-str">"join.tip"</span>)!!)
+}
+
+on&lt;PlayerJoinEvent&gt; { e -&gt; sendJoin(e.player) }
+
+on&lt;PlayerDeathEvent&gt; { e -&gt;
+    val killer = e.damageSource?.causingEntity?.name ?: <span class="tok-str">"tự nhiên"</span>
+    val text = msg.getString(<span class="tok-str">"death.message"</span>)!!
+        .replace(<span class="tok-str">"{player}"</span>, e.player.name)
+        .replace(<span class="tok-str">"{killer}"</span>, killer)
+    server.broadcast(Component.text(replaceColor(text)))
+}
+
+<span class="tok-fn">fun</span> replaceColor(s: String) = s.replace(<span class="tok-str">"&lt;"</span>, <span class="tok-str">"&lt;"</span>).replace(<span class="tok-str">"&gt;"</span>, <span class="tok-str">"&gt;"</span>).replace(<span class="tok-str">"&amp;"</span>, <span class="tok-str">"&amp;"</span>)</code></pre>
+    <div class="callout note">
+      <div class="ttl">💡 scriptFile — đường dẫn script hiện tại</div>
+      <p style="margin:0">Kite cung cấp biến <code>scriptFile</code> (kiểu <code>File</code>) trỏ tới file <code>.kite.kts</code> đang chạy. Dùng <code>File(scriptFile, "message.yml")</code> để mở file cùng thư mục một cách an toàn, không phụ thuộc working directory.</p>
+    </div>
+
+    <h4>3) Các script khác CÙNG dùng file này</h4>
+    <p>Vì <code>message.yml</code> nằm trên đĩa, <strong>bất kỳ script nào</strong> cũng đọc được. Cách gọn: đặt code nạp + lấy thông điệp vào một hàm dùng chung, mỗi script <code>onLoad</code> sẽ nạp file. Ví dụ script thứ 2 dùng <code>message.yml</code> để gửi quà:</p>
+    <pre><code><span class="tok-com">// daily_reward.kite.kts — script riêng, vẫn đọc chung message.yml</span>
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+
+val msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+on&lt;PlayerJoinEvent&gt; { e -&gt;
+    val player = e.player
+    if (hasClaimedToday(player.uniqueId)) <span class="tok-kw">return</span><span class="tok-var">@on</span>
+    player.sendRichMessage(
+        msg.getString(<span class="tok-str">"reward.daily"</span>)!!.replace(<span class="tok-str">"{amount}"</span>, <span class="tok-str">"50"</span>)
+    )
+    player.inventory.addItem(ItemStack(Material.DIAMOND, <span class="tok-num">1</span>))
+}
+
+<span class="tok-fn">fun</span> hasClaimedToday(uuid: java.util.UUID): Boolean = <span class="tok-kw">false</span> <span class="tok-com">// bạn ghi vào file khác để nhớ</span></code></pre>
+
+    <h4>4) Ghi / tạo file từ script</h4>
+    <p>Muốn <strong>tạo file</strong> hoặc <strong>cập nhật</strong> dữ liệu, dùng <code>YamlConfiguration.save(File)</code>. Đây là cách lưu điểm, quà hằng ngày, số lần login… Mẹo: <strong>tự sinh message.yml mặc định</strong> khi chưa có:</p>
+    <pre><code><span class="tok-com">// config_init.kite.kts — tạo message.yml nếu chưa tồn tại</span>
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+
+val f = File(scriptFile, <span class="tok-str">"message.yml"</span>)
+<span class="tok-kw">if</span> (!f.exists()) {
+    f.parentFile.mkdirs()                                   <span class="tok-com">// tạo thư mục nếu thiếu</span>
+    val def = YamlConfiguration()
+    def.set(<span class="tok-str">"join.welcome"</span>, <span class="tok-str">"&lt;gold&gt;Chào mừng {player}!"</span>)
+    def.set(<span class="tok-str">"reward.daily"</span>, <span class="tok-str">"&lt;green&gt;Nhận {amount} 🌟"</span>)
+    def.save(f)                                             <span class="tok-com">// ghi ra đĩa</span>
+    server.consoleSender.sendPlainMessage(<span class="tok-str">"[Kite] Đã tạo message.yml"</span>)
+}</code></pre>
+    <div class="callout warn">
+      <div class="ttl">⚠️ Lưu ý quan trọng</div>
+      <ul style="margin:0">
+        <li><strong>Đường dẫn an toàn:</strong> luôn đặt file trong thư mục script (<code>File(scriptFile, "...")</code>) để tránh ghi ra ngoài — là <strong>lỗ hổng bảo mật</strong> nếu cho người khác nạp script.</li>
+        <li><strong>Charset:</strong> dùng <code>YamlConfiguration</code> thì tiếng Việt lưu tốt. Nếu tự đọc bằng <code>File.readText()</code>, chỉ rõ encoding: <code>File(...).readText(Charsets.UTF_8)</code>.</li>
+        <li><strong>Reload:</strong> sau khi sửa <code>message.yml</code>, chạy <code>/kite reload message_loader</code> để script đọc lại file mới.</li>
+      </ul>
+    </div>
+
+    <h3 id="vd15">Ví dụ 15 — Quest NPC: flag trạng thái bằng quyền (kiểu ConditionalEvents)</h3>
+    <p>Ví dụ này <strong>hookup FancyNpcs làm NPC</strong> — lắng nghe <code>NpcInteractEvent</code> khi người chơi click NPC. Không cần <code>@file:Dependency</code> vì FancyNpcs đã cài trên server (chi tiết ở <a href="#vd12">Ví dụ 12</a>).</p>
+
+    <div class="callout success">
+      <div class="ttl">✅ 1 script quản lý MỌI NPC — không tạo file kts cho từng NPC</div>
+      <p style="margin:0">File <span class="file-path">npc_single.kite.kts</span> đọc cấu hình từ <span class="file-path">npc.yml</span>. <strong>1 script duy nhất</strong> xử lý <strong>tất cả NPC</strong>. Muốn thêm NPC chỉ cần thêm 1 khối trong <code>npc.yml</code> rồi <code>/kite reloadall</code> — <strong>không sửa code</strong>.</p>
+    </div>
+
+    <div class="callout note">
+      <div class="ttl">📦 Chuẩn bị NPC bằng FancyNpcs</div>
+      <ul style="margin:0">
+        <li>Cài plugin <strong>FancyNpcs</strong> (Paper 1.21.11).</li>
+        <li>Đứng vị trí muốn đặt, tạo NPC: <span class="cmd">/npc create shop</span> (hoặc <span class="cmd">/npc create healer</span>…). <strong>Tên NPC = id</strong>, khớp với key trong <code>npc.yml</code>.</li>
+        <li>Đặt skin/model: <span class="cmd">/npc skin &lt;tên&gt;</span>.</li>
+      </ul>
+    </div>
+
+    <p><strong>Bước 1 —</strong> Đặt script vào <span class="file-path">plugins/Kite/scripts/</span>. Lần chạy đầu tiên nó <strong>tự tạo</strong> file <span class="file-path">npc.yml</span> mẫu (khối <code>shop</code>). Mở ra sửa theo ý bạn — và <strong>thêm thêm các NPC khác</strong> bằng cách copy khối rồi đổi tên.</p>
+    <div class="duo">
+      <div>
+        <div class="cap">👀 <b>npc.yml</b> — sau khi bạn thêm thêm NPC <code>healer</code></div>
+        <pre class="preview-yaml"><span class="c"># npc.yml</span>
+npcs:
+  <span class="k">shop:</span>              <span class="c"># /npc create shop</span>
+    <span class="k">perm:</span> <span class="s">"vip.npc.shop"</span>
+    <span class="k">need:</span> <span class="s">"GOLD_INGOT"</span>    <span class="c"># item cần nộp để mở</span>
+    <span class="k">amount:</span> <span class="n">10</span>          <span class="c"># số lượng cần</span>
+    <span class="k">cmd_gained:</span>          <span class="c"># lệnh chạy khi đã mở</span>
+      - <span class="s">"shop"</span>
+      - <span class="s">"give {player} diamond 1"</span>
+  <span class="k">healer:</span>            <span class="c"># /npc create healer — NPC mới</span>
+    <span class="k">perm:</span> <span class="s">"vip.npc.healer"</span>
+    <span class="k">need:</span> <span class="s">"DIAMOND"</span>
+    <span class="k">amount:</span> <span class="n">1</span>
+    <span class="k">cmd_gained:</span> []</pre>
+      </div>
+      <div>
+        <div class="cap">🧩 <b>Giải thích</b> — từng key</div>
+        <pre class="preview-yaml"><span class="k">perm</span>         → quyền = <span class="c">flag "đã mở"</span>; player có nó là xong quest
+<span class="k">need</span>         → item phải nộp để mở (tên Material, in hoa)
+<span class="k">amount</span>       → số lượng item cần nộp
+<span class="k">cmd_gained</span>   → lệnh chạy khi đã mở (danh sách, chạy theo thứ tự)
+
+<span class="c">Thêm NPC mới:</span> copy 1 khối → đổi tên + perm
+→ tạo NPC cùng tên trong FancyNpcs
+→ <span class="s">/kite reloadall</span>
+không cần sửa script.</pre>
+      </div>
+    </div>
+
+    <div class="callout note">
+      <div class="ttl">💬 Message để trong script luôn — gọn</div>
+      <p style="margin:0">Khác với <a href="#vd14">Ví dụ 14</a> (message.yml để ngoài cho nhiều script dùng chung), <span class="file-path">npc_single</span> <strong>tự chứa message</strong> bằng <code>sendRichMessage</code> để đúng tiêu chí "1 file gọn, không tách rời". Sau này muốn tách message ra ngoài thì tham khảo Ví dụ 14.</p>
+    </div>
+
+    <p><strong>Bước 2 —</strong> Script <span class="file-path">npc_single.kite.kts</span> (chỉ 1 file, tự chứa tất cả).</p>
+
+    <div class="callout success">
+      <div class="ttl">📄 File script HOÀN CHỈNH đã có sẵn</div>
+      <p style="margin:0">Bạn không cần gõ lại — file <strong><span class="file-path">npc_single.kite.kts</span></strong> (đầy đủ comment, xử lý lỗi Material, log <code>onLoad</code>/<code>onUnload</code>) đã được tạo cùng thư mục. Đặt nó vào <span class="file-path">plugins/Kite/scripts/</span> rồi <code>/kite load npc_single</code> là chạy.</p>
+    </div>
+
+    <div class="callout note">
+      <div class="ttl">🧠 Cấu trúc chính của script</div>
+      <ul style="margin:0">
+        <li><strong>Tự tạo npc.yml:</strong> nếu chưa có, ghi khối <code>shop</code> mẫu vào <code>File(scriptFile, "npc.yml")</code>.</li>
+        <li><strong><code>on&lt;NpcInteractEvent&gt;</code>:</strong> lấy <code>npcId = event.npc.data.name</code> → <code>cfg.getConfigurationSection("npcs.$npcId")</code>; <code>null</code> → bỏ qua an toàn.</li>
+        <li><strong>Đã mở</strong> (<code>hasPermission(perm)</code>) → chạy <code>cmd_gained</code> (thay <code>{player}</code>) → gửi message "đã mở", không làm lại nv.</li>
+        <li><strong>Chưa mở</strong> → đếm item (<code>need</code> + <code>amount</code>): đủ → <code>removeItems</code> + console gán quyền + thông báo; chưa đủ → nhắc nhiệm vụ.</li>
+        <li><strong>Hàm <code>removeItems</code></strong> trừ item khỏi inventory.</li>
+        <li><strong><code>onLoad</code>/<code>onUnload</code>:</strong> log các NPC đang quản lý khi nạp/gỡ.</li>
+      </ul>
+    </div>
+
+    <p>Toàn bộ script (để copy):</p>
+    <pre><code><span class="tok-com">// npc_single.kite.kts — Quest NPC, MỘT file duy nhất, tự chứa tất cả</span>
+import de.oliver.fancynpcs.api.events.NpcInteractEvent
+import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+
+<span class="tok-com">// ---- 1. CẤU HÌNH (tự tạo npc.yml nếu chưa có) ----</span>
+val npcFile = File(scriptFile, <span class="tok-str">"npc.yml"</span>)
+if (!npcFile.exists()) {
+    npcFile.parentFile.mkdirs()
+    val def = YamlConfiguration()
+    def.set(<span class="tok-str">"npcs.shop.perm"</span>, <span class="tok-str">"vip.npc.shop"</span>)
+    def.set(<span class="tok-str">"npcs.shop.need"</span>, <span class="tok-str">"GOLD_INGOT"</span>)
+    def.set(<span class="tok-str">"npcs.shop.amount"</span>, <span class="tok-num">10</span>)
+    def.set(<span class="tok-str">"npcs.shop.cmd_gained"</span>, listOf(<span class="tok-str">"shop"</span>, <span class="tok-str">"give {player} diamond 1"</span>))
+    def.save(npcFile)
+    logger.info(<span class="tok-str">"[npc_single] Đã tự tạo npc.yml mặc định"</span>)
+}
+val cfg = YamlConfiguration.loadConfiguration(npcFile)
+
+<span class="tok-com">// ---- 2. SỰ KIỆN TƯƠNG TÁC NPC (FancyNpcs) ----</span>
+on&lt;NpcInteractEvent&gt; { event -&gt;
+    val player = event.player
+    val npcId = event.npc.data.name
+    val sec = cfg.getConfigurationSection(<span class="tok-str">"npcs.$npcId"</span>) ?: return@on
+    val perm = sec.getString(<span class="tok-str">"perm"</span>) ?: return@on
+
+    <span class="tok-com">// ĐÃ mở (có quyền) → chạy lệnh, không làm lại nhiệm vụ</span>
+    if (player.hasPermission(perm)) {
+        sec.getStringList(<span class="tok-str">"cmd_gained"</span>)
+            .filter { it.isNotBlank() }
+            .forEach { raw -&gt; player.performCommand(raw.replace(<span class="tok-str">"{player}"</span>, player.name)) }
+        player.sendRichMessage(<span class="tok-str">"&lt;green&gt;✨ Bạn đã mở NPC này rồi!"</span>)
+        return@on
+    }
+
+    <span class="tok-com">// CHƯA mở → kiểm tra nộp item</span>
+    val mat = Material.valueOf(sec.getString(<span class="tok-str">"need"</span>)!!.uppercase())
+    val amount = sec.getInt(<span class="tok-str">"amount"</span>, <span class="tok-num">1</span>)
+    val have = player.inventory.all(mat).values.sumOf { it.amount }
+
+    if (have &lt; amount) {
+        player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;📜 Nhiệm vụ: mang &lt;yellow&gt;$amount ${mat.name.lowercase()}&lt;/yellow&gt; cho ta."</span>)
+        player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Quay lại khi đủ để mở quyền."</span>)
+    } else {
+        removeItems(player, mat, amount)
+        server.dispatchCommand(server.consoleSender, <span class="tok-str">"lp user ${player.name} permission set $perm true"</span>)
+        player.sendRichMessage(<span class="tok-str">"&lt;green&gt;✅ Hoàn thành! Đã mở quyền cho bạn."</span>)
+    }
+}
+
+<span class="tok-com">// ---- 3. HÀM TIỆN ÍCH ----</span>
+fun removeItems(player: Player, mat: Material, count: Int) {
+    var left = count
+    player.inventory.all(mat).forEach { (_, item) -&gt;
+        if (left &lt;= <span class="tok-num">0</span>) return
+        val take = minOf(left, item.amount)
+        item.amount -= take
+        left -= take
+    }
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">💡 Giải thích vòng khép kín + cấu hình</div>
+      <ul style="margin:0">
+        <li><strong>Quyền = flag:</strong> <code>player.hasPermission(perm)</code> trả lời "đã hoàn thành chưa?". Vừa <strong>check điều kiện</strong> vừa <strong>lưu trạng thái</strong> — không cần file ghi nhớ riêng.</li>
+        <li><strong>Thêm NPC mới = thêm 1 khối trong npc.yml</strong>, không sửa script. Copy khối <code>healer:</code> → đổi tên + <code>perm</code> → tạo NPC cùng tên → <code>/kite reloadall</code>.</li>
+        <li><strong>NPC không nằm trong npc.yml</strong> → <code>getConfigurationSection("npcs.$id")</code> trả <code>null</code> → bị bỏ qua an toàn.</li>
+        <li><strong>Lần đầu:</strong> chưa quyền → nhắc nhiệm vụ, yêu cầu nộp item.</li>
+        <li><strong>Đủ item:</strong> <code>removeItems</code> thu item → <code>lp user ... permission set ... true</code> <strong>gán quyền</strong>.</li>
+        <li><strong>Lần sau:</strong> nhánh <code>if (hasPermission)</code> chạy lệnh từ <code>cmd_gained</code> → <strong>không làm lại nv</strong>.</li>
+        <li>Placeholder <code>{player}</code> được thay trong lệnh; message dùng MiniMessage (<code>&lt;green&gt;</code>…).</li>
+        <li>Xóa quyền để "reset" quest cho player: <code>lp user &lt;tên&gt; permission unset &lt;perm&gt;</code>.</li>
+      </ul>
+    </div>
+
+    <!-- ===================== TÀI NGUYÊN ===================== -->
+    <h2 id="nguon"><span class="num">16</span>Lệnh quản lý &amp; tài nguyên</h2>
+
+    <h3>Các lệnh quản lý (yêu cầu permission <code>kite.manage</code>)</h3>
+    <table>
+      <tr><th>Lệnh</th><th>Chức năng</th></tr>
+      <tr><td><code>/kite list (script)</code></td><td>Liệt kê tất cả script</td></tr>
+      <tr><td><code>/kite load (script)</code></td><td>Nạp script theo tên</td></tr>
+      <tr><td><code>/kite unload (script)</code></td><td>Gỡ script đang nạp</td></tr>
+      <tr><td><code>/kite reload (script)</code></td><td>Reload một script</td></tr>
+      <tr><td><code>/kite reloadall</code></td><td>Reload tất cả script</td></tr>
+    </table>
+    <p>Phần <code>(script)</code> là <strong>tùy chọn</strong> — nếu bỏ qua, áp dụng cho toàn bộ script.</p>
+
+    <div class="callout danger">
+      <div class="ttl">🚨 Cảnh báo bảo mật</div>
+      <p>Chỉ cấp quyền các lệnh này cho <strong>những người bạn tin tưởng</strong>, vì chúng có thể nạp/gỡ/reload mã chạy trên server.</p>
+    </div>
+
+    <h3>Đường dẫn hữu ích</h3>
+    <ul>
+      <li><strong>Kite Documentation:</strong> <a href="https://echonine.dev/kite/" target="_blank" rel="noopener">echonine.dev/kite</a></li>
+      <li><strong>Kotlin Documentation:</strong> <a href="https://kotlinlang.org/" target="_blank" rel="noopener">kotlinlang.org</a></li>
+      <li><strong>Paper Documentation:</strong> <a href="https://docs.papermc.io/" target="_blank" rel="noopener">docs.papermc.io</a></li>
+      <li><strong>Paper JavaDocs:</strong> <a href="https://jd.papermc.io/" target="_blank" rel="noopener">jd.papermc.io</a> (API Paper/Bukkit)</li>
+      <li><strong>Adventure API:</strong> <a href="https://jd.papermc.io/paper/current/" target="_blank" rel="noopener">javaDoc Adventure</a></li>
+      <li><strong>Kite GitHub:</strong> <a href="https://github.com/EchoNineLabs/Kite" target="_blank" rel="noopener">EchoNineLabs/Kite</a></li>
+      <li><strong>Starter project:</strong> <a href="https://github.com/EchoNineLabs/KiteScripting" target="_blank" rel="noopener">EchoNineLabs/KiteScripting</a></li>
+      <li><strong>Kite Discord:</strong> hỗ trợ cộng đồng</li>
+    </ul>
+
+    <footer>
+      <p>Wiki tiếng Việt được tổng hợp &amp; dịch từ <a href="https://echonine.dev/kite/" target="_blank" rel="noopener">tài liệu chính thức của Kite</a> — © EchoNine, định hướng sử dụng Paper API hiện đại (Adventure + Paper scheduler). Mục đích giáo dục &amp; tham khảo. Tài liệu gốc vẫn đang hoàn thiện.</p>
+    </footer>
+
+  </main>
+</div>
+
+<button id="backTop" title="Lên đầu trang" aria-label="Lên đầu trang">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>

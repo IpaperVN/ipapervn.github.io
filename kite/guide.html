@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ trình học Kite — từ cơ bản đến nâng cao</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- ============ SIDEBAR (lộ trình) ============ -->
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">📘</span> Lộ trình Kite</div>
+    <div class="tagline">Từ cơ bản đến nâng cao</div>
+
+    <div class="nav-group">Bắt đầu</div>
+    <a class="nav-item" href="#lop-1">Bài 1 — Kite là gì?</a>
+    <a class="nav-item" href="#lop-2">Bài 2 — Cài đặt</a>
+    <a class="nav-item" href="#lop-3">Bài 3 — Script đầu tiên</a>
+
+    <div class="nav-group">Nền tảng</div>
+    <a class="nav-item" href="#lop-4">Bài 4 — Cấu trúc script</a>
+    <a class="nav-item" href="#lop-5">Bài 5 — Vòng đời</a>
+    <a class="nav-item" href="#lop-6">Bài 6 — Gửi tin nhắn</a>
+
+    <div class="nav-group">Tương tác</div>
+    <a class="nav-item" href="#lop-7">Bài 7 — Bắt event</a>
+    <a class="nav-item" href="#lop-8">Bài 8 — Chạy lệnh</a>
+    <a class="nav-item" href="#lop-9">Bài 9 — Hẹn giờ</a>
+
+    <div class="nav-group">Nâng cao</div>
+    <a class="nav-item" href="#lop-10">Bài 10 — Đọc file YAML</a>
+    <a class="nav-item" href="#lop-11">Bài 11 — Plugin khác</a>
+    <a class="nav-item" href="#lop-12">Bài 12 — Quest NPC</a>
+    <a class="nav-item" href="#lop-13">Bài 13 — Script hoàn chỉnh</a>
+    <a class="nav-item" href="#lop-14">Bài 14 — Message Loader chung</a>
+
+    <div class="nav-group">Liên kết</div>
+    <a class="nav-item" href="kite-wiki.html">🪁 Về wiki chính</a>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content">
+
+    <h1>Lộ trình học Kite<span class="sub">Hướng dẫn từ A → Z: cài đặt → script đầu tiên → event → lệnh → file → plugin ngoài → dự án hoàn chỉnh</span></h1>
+
+    <a class="guide-banner" href="kite-wiki.html"><span class="arrow">←</span> Quay lại wiki chính để xem chi tiết tham chiếu</a>
+
+    <div class="callout success">
+      <div class="ttl">🎯 Mục tiêu</div>
+      <p style="margin:0">Sau lộ trình này bạn sẽ tự viết được script Kite chạy trên Paper 1.21.11: bắt event, gửi tin, chạy lệnh, đọc file cấu hình, và làm một hệ thống quest NPC hoàn chỉnh bằng cách liên kết các bài học lại với nhau.</p>
+    </div>
+
+    <!-- ===================== BÀI 1 ===================== -->
+    <h2 id="lop-1"><span class="num">1</span>Kite là gì?</h2>
+    <p><strong>Kite</strong> là một công cụ cho phép bạn viết <strong>plugin Minecraft bằng Kotlin</strong> mà <strong>không cần biên dịch / đóng gói / restart server</strong>. Bạn đặt file <code>.kite.kts</code> vào thư mục script, Kite tự động nạp và biên dịch sang bytecode, rồi chạy ngay.</p>
+
+    <table>
+      <tr><th>Bạn không cần</th><th>Bạn chỉ cần</th></tr>
+      <tr><td>Biết Java</td><td>Biết Kotlin cơ bản (biến, hàm, if/else, class)</td></tr>
+      <tr><td>Môi trường build (Maven/Gradle)</td><td>Một file <code>.kite.kts</code> đúng chuẩn</td></tr>
+      <tr><td>Restart server mỗi lần sửa</td><td><code>/kite reload &lt;script&gt;</code></td></tr>
+      <tr><td>IDE (IntelIJ) bắt buộc</td><td>Đặt file vào <span class="file-path">plugins/Kite/scripts/</span></td></tr>
+    </table>
+
+    <div class="callout note">
+      <div class="ttl">💡 Điểm khác biệt so với plugin thường</div>
+      <p style="margin:0">Plugin viết bằng Java/Kotlin phải build ra <code>.jar</code> rồi restart. Script Kite <strong>nằm sẵn trong thư mục server</strong>, sửa xong chỉ cần reload — nhanh gọn, phù hợp thay đổi logic thường xuyên.</p>
+    </div>
+
+    <!-- ===================== BÀI 2 ===================== -->
+    <h2 id="lop-2"><span class="num">2</span>Cài đặt</h2>
+    <ol>
+      <li><strong>Máy chủ Paper 1.21.11</strong> (Java 21).</li>
+      <li>Tải plugin <strong>Kite</strong> từ trang chính thức và bỏ vào <span class="file-path">plugins/</span>.</li>
+      <li>Khởi động server — Kite tạo thư mục <span class="file-path">plugins/Kite/scripts/</span>.</li>
+      <li>Đặt các file <code>.kite.kts</code> vào thư mục đó.</li>
+    </ol>
+
+    <div class="callout success">
+      <div class="ttl">✅ Không cần khai báo version cho plugin đã cài</div>
+      <p style="margin:0">Vì script nằm <strong>trong server</strong>, Kite truy cập thẳng class của plugin đang chạy qua classpath. <strong>Không cần <code>@file:Dependency</code></strong> cho các plugin như LuckPerms, FancyNpcs… (chỉ dùng <code>compileOnly</code> trong Gradle nếu bạn dùng IDE để gợi ý code). Xem <a href="kite-wiki.html#dependencies">bài Quản lý thư viện</a>.</p>
+    </div>
+
+    <!-- ===================== BÀI 3 ===================== -->
+    <h2 id="lop-3"><span class="num">3</span>Script đầu tiên</h2>
+    <p>Tạo file <span class="file-path">hello.kite.kts</span> trong <span class="file-path">plugins/Kite/scripts/</span>:</p>
+    <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Hello, World!"</span>)
+}</code></pre>
+    <p>Lưu file → chạy <span class="cmd">/kite reload hello</span> → xem console có dòng <code>Hello, World!</code>. 🎉</p>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Nạp script chưa nằm trong thư mục</div>
+      <p style="margin:0">Kite tự nạp script đã đặt trong thư mục khi server khởi động. Với script <strong>mới thêm khi server đang chạy</strong>, dùng <code>/kite load &lt;tên&gt;</code> để nạp mà không cần restart.</p>
+    </div>
+
+    <!-- ===================== BÀI 4 ===================== -->
+    <h2 id="lop-4"><span class="num">4</span>Cấu trúc script</h2>
+    <p>Kite tự import sẵn các gói phổ biến của Paper, nên bạn dùng ngay <code>Player</code>, <code>Material</code>, <code>server</code>, <code>logger</code>… mà không cần import. API của <strong>plugin khác</strong> thì phải import tường minh. Xem chi tiết: <a href="kite-wiki.html#cau-truc-script">Cấu trúc script</a>.</p>
+
+    <h3>Script một file</h3>
+    <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Xin chào từ script một file!"</span>)
+}</code></pre>
+
+    <h3>Script đa file</h3>
+    <p>Đặt trong thư mục con — thư mục đó <strong>bắt buộc có file entry point</strong> tên <span class="file-path">main.kite.kts</span>. Các file khác import qua <code>@file:Import</code>.</p>
+    <pre><code><span class="tok-com">// scripts/my_plugin/main.kite.kts</span>
+<span class="tok-ann">@file:Import</span>(<span class="tok-str">"helpers.kite.kts"</span>)
+
+<span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Đã nạp my_plugin!"</span>)
+    <span class="tok-fn">printHelper</span>() <span class="tok-com">// hàm từ helpers.kite.kts</span>
+}</code></pre>
+    <pre><code><span class="tok-com">// scripts/my_plugin/helpers.kite.kts</span>
+<span class="tok-fn">fun</span> <span class="tok-fn">printHelper</span>() {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Tôi là helper! 🧰"</span>)
+}</code></pre>
+
+    <!-- ===================== BÀI 5 ===================== -->
+    <h2 id="lop-5"><span class="num">5</span>Vòng đời script</h2>
+    <p>Hai khối chính: <code>onLoad</code> (sau khi nạp) và <code>onUnload</code> (trước khi gỡ). Dùng để khởi tạo và dọn dẹp.</p>
+    <pre><code><span class="tok-kw">onLoad</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Hello!"</span>)
+}
+<span class="tok-kw">onUnload</span> {
+    <span class="tok-fn">println</span>(<span class="tok-str">"Goodbye!"</span>)
+}</code></pre>
+
+    <div class="callout danger">
+      <div class="ttl">🚫 Biên dịch bất đồng bộ</div>
+      <p style="margin:0">Kite biên dịch script <strong>bất đồng bộ</strong>. Tránh gọi hàm <strong>non-thread-safe</strong> (vd <code>getTargetBlockExact</code>) ở top-level — đưa vào <code>onLoad</code> cho an toàn.</p>
+    </div>
+
+    <!-- ===================== BÀI 6 ===================== -->
+    <h2 id="lop-6"><span class="num">6</span>Gửi tin nhắn (Adventure)</h2>
+    <p>Paper hiện đại dùng <strong>Adventure API</strong>. <code>sendRichMessage</code> hỗ trợ mã màu kiểu MiniMessage <code>&lt;gold&gt;</code>, <code>&lt;red&gt;</code>…</p>
+    <pre><code>player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;Chào &lt;bold&gt;bạn&lt;/bold&gt;!"</span>)</code></pre>
+    <div class="callout note">
+      <div class="ttl">💡 Còn gì nữa?</div>
+      <p style="margin:0">Title, kick, broadcast… đều dùng Adventure. Xem <a href="kite-wiki.html#adventure">Adventure Text</a> và <a href="kite-wiki.html#legacy-vs-modern">Bukkit cũ → Paper mới</a> để tránh code kiểu cũ.</p>
+    </div>
+
+    <!-- ===================== BÀI 7 ===================== -->
+    <h2 id="lop-7"><span class="num">7</span>Bắt event</h2>
+    <p>Dùng <code>on&lt;Event&gt;</code> để phản ứng khi sự kiện xảy ra. Event Bukkit chuẩn (PlayerJoinEvent…) tự có sẵn, không cần import.</p>
+    <pre><code><span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event -&gt;
+    event.player.sendRichMessage(<span class="tok-str">"&lt;green&gt;Chào mừng đến server!"</span>)
+}</code></pre>
+    <div class="callout note">
+      <div class="ttl">💡 Xem thêm</div>
+      <p style="margin:0">Muốn sắp thứ tự giữa các listener, dùng <code>priority</code>. Chi tiết: <a href="kite-wiki.html#event-listener">Event Listener</a>.</p>
+    </div>
+
+    <!-- ===================== BÀI 8 ===================== -->
+    <h2 id="lop-8"><span class="num">8</span>Chạy lệnh</h2>
+    <ul>
+      <li><code>player.performCommand("...")</code> — player tự chạy lệnh.</li>
+      <li><code>server.dispatchCommand(server.consoleSender, "...")</code> — <strong>console chạy lệnh</strong> (cấp quyền, trao item, lệnh admin).</li>
+      <li>Chèn biến: <code>"give ${player.name} diamond 1"</code>.</li>
+    </ul>
+    <pre><code>server.dispatchCommand(server.consoleSender, <span class="tok-str">"lp user ${player.name} permission set vip true"</span>)
+player.performCommand(<span class="tok-str">"spawn"</span>)</code></pre>
+
+    <!-- ===================== BÀI 9 ===================== -->
+    <h2 id="lop-9"><span class="num">9</span>Hẹn giờ (Scheduler)</h2>
+    <p>Paper cung cấp scheduler Folia-ready. Ví dụ chạy lặp mỗi 60 giây:</p>
+    <pre><code>server.asyncScheduler.runAtFixedRate(server, { task -&gt;
+    server.broadcast(Component.text(<span class="tok-str">"⏰ Đã 1 phút!"</span>))
+}, <span class="tok-num">60</span> * <span class="tok-num">20</span>, <span class="tok-num">60</span> * <span class="tok-num">20</span>)</code></pre>
+    <div class="callout warn">
+      <div class="ttl">⚠️ Luồng chạy</div>
+      <p style="margin:0"><code>asyncScheduler</code> chạy off-thread — đừng chạm tới world/player ở đó nếu không cần. Chi tiết: <a href="kite-wiki.html#scheduler">Scheduler</a>.</p>
+    </div>
+
+    <!-- ===================== BÀI 10 ===================== -->
+    <h2 id="lop-10"><span class="num">10</span>Đọc file YAML</h2>
+    <p>Dùng <code>YamlConfiguration</code> (có sẵn trong Paper) để đọc file cấu hình đặt cạnh script:</p>
+    <pre><code>import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
+
+val msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+on&lt;PlayerJoinEvent&gt; { e -&gt;
+    e.player.sendRichMessage(msg.getString(<span class="tok-str">"join.welcome"</span>)!!.replace(<span class="tok-str">"{player}"</span>, e.player.name))
+}</code></pre>
+    <div class="callout note">
+      <div class="ttl">💡 Lộ trình liên quan</div>
+      <p style="margin:0">Biến <code>scriptFile</code> trỏ tới script hiện tại. Muốn tạo file nếu chưa có, xem <a href="kite-wiki.html#vd14">Ví dụ 14 — message.yml</a>.</p>
+    </div>
+
+    <!-- ===================== BÀI 11 ===================== -->
+    <h2 id="lop-11"><span class="num">11</span>Dùng API plugin khác</h2>
+    <p>Plugin đã cài trên server (FancyNpcs, LuckPerms…) → <strong>import tường minh</strong> class của nó, không cần <code>@file:Dependency</code>.</p>
+    <pre><code>import de.oliver.fancynpcs.api.events.NpcInteractEvent
+
+on&lt;NpcInteractEvent&gt; { event -&gt;
+    event.player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;Bạn click NPC ${event.npc.data.name}"</span>)
+}</code></pre>
+    <div class="callout note">
+      <div class="ttl">💡 Xem thêm</div>
+      <p style="margin:0">Chi tiết về FancyNpcs ở <a href="kite-wiki.html#vd12">Ví dụ 12</a>, về PlaceholderAPI ở <a href="kite-wiki.html#vd4">Ví dụ 4</a>, về bắt event của plugin khác ở <a href="kite-wiki.html#vd13">Ví dụ 13</a>.</p>
+    </div>
+
+    <!-- ===================== BÀI 12 ===================== -->
+    <h2 id="lop-12"><span class="num">12</span>Dự án hoàn chỉnh: Quest NPC</h2>
+    <p>Áp dụng mọi bài đã học thành <strong>một hệ thống</strong>: NPC yêu cầu nộp item → hoàn thành thì gán quyền → lần sau vào thẳng. Dùng quyền làm <strong>flag lưu trạng thái</strong>, cấu hình trong <code>npc.yml</code>.</p>
+
+    <div class="callout success">
+      <div class="ttl">✅ 1 script quản lý mọi NPC — không tạo script mới mỗi NPC</div>
+      <p style="margin:0">Cấu hình NPC để trong <code>npc.yml</code>. Thêm NPC = thêm 1 khối + <code>/kite reload</code>, không sửa code. <a href="kite-wiki.html#vd15">Xem Ví dụ 15 đầy đủ</a>.</p>
+    </div>
+
+    <p>Vòng khép kín (giống ConditionalEvents):</p>
+    <ol>
+      <li><strong>Lần đầu</strong> click NPC → chưa có quyền → đọc message nhiệm vụ, yêu cầu nộp item.</li>
+      <li><strong>Đủ item</strong> → thu item → <code>lp user ... permission set ... true</code> <strong>gán quyền</strong>.</li>
+      <li><strong>Lần sau</strong> → có quyền → chạy <code>cmd_gained</code>, không làm lại.</li>
+    </ol>
+
+    <pre><code><span class="tok-com">// npc.yml — cấu hình mọi NPC</span>
+npcs:
+  shop:
+    perm: <span class="tok-str">"vip.npc.shop"</span>
+    need: <span class="tok-str">"GOLD_INGOT"</span>
+    amount: <span class="tok-num">10</span>
+    cmd_gained:
+      - <span class="tok-str">"shop"</span>
+      - <span class="tok-str">"give {player} diamond 1"</span></code></pre>
+
+    <!-- ===================== BÀI 13 ===================== -->
+    <h2 id="lop-13"><span class="num">13</span>Script hoàn chỉnh (copy-paste)</h2>
+
+    <p>Đây là <strong>toàn bộ</strong> script <span class="file-path">daily_reward.kite.kts</span> — một ví dụ <strong>khác hẳn</strong> với các ví dụ trong wiki. Nó tổng hợp các kỹ năng đã học: bắt event, đăng ký lệnh, đọc/ghi file YAML, gửi tin Adventure, hẹn giờ. <strong>Chỉ cần 1 file duy nhất</strong> — file <code>data.yml</code> được tự tạo để ghi nhớ lần nhận quà, bạn không phải tạo file cấu hình nào.</p>
+
+    <div class="callout success">
+      <div class="ttl">✅ Script này khác gì?</div>
+      <ul style="margin:0">
+        <li><strong>Không dùng FancyNpcs</strong>, không quest — hoàn toàn độc lập, dùng event Bukkit chuẩn.</li>
+        <li>Tự <strong>tạo file <code>data.yml</code></strong> khi chạy lần đầu (minh họa ghi file).</li>
+        <li>Có <strong>lệnh <code>/reward</code></strong> tự đăng ký.</li>
+        <li>Có <strong>hẹn giờ</strong> broadcast nhắc nhở mỗi 30 phút.</li>
+      </ul>
+    </div>
+
+    <p><strong>Cách dùng:</strong></p>
+    <ol>
+      <li>Copy nguyên khối dưới đây → tạo file <span class="file-path">daily_reward.kite.kts</span>.</li>
+      <li>Đặt vào <span class="file-path">plugins/Kite/scripts/</span>.</li>
+      <li>Chạy <span class="cmd">/kite load daily_reward</span>.</li>
+      <li>Vào game — được chào mừng + nhận quà 1 lần/ngày; gõ <code>/reward</code> để nhận.</li>
+    </ol>
+
+    <pre><code><span class="tok-com">// ============================================================</span>
+<span class="tok-com">// daily_reward.kite.kts — Chào mừng + quà hằng ngày</span>
+<span class="tok-com">// Khác hẳn wiki: event Bukkit, lệnh, file, scheduler</span>
+<span class="tok-com">// Cách dùng:</span>
+<span class="tok-com">//   1) Đặt file vào  plugins/Kite/scripts/</span>
+<span class="tok-com">//   2) Nạp:  /kite load daily_reward</span>
+<span class="tok-com">//   3) Player vào server → chào mừng + nhận quà 1 lần/ngày</span>
+<span class="tok-com">//   4) Gõ  /reward  → nhận quà qua lệnh</span>
+<span class="tok-com">//   File data.yml tự tạo để ghi nhớ lần nhận cuối.</span>
+<span class="tok-com">// ============================================================</span>
+
+<span class="tok-kw">import</span> net.kyori.adventure.text.minimessage.MiniMessage
+<span class="tok-kw">import</span> org.bukkit.configuration.file.YamlConfiguration
+<span class="tok-kw">import</span> java.io.File
+<span class="tok-kw">import</span> java.time.LocalDate
+<span class="tok-kw">import</span> java.util.logging.Level
+
+<span class="tok-com">// ---- 1. FILE DỮ LIỆU (tự tạo nếu chưa có) ----</span>
+<span class="tok-var">val</span> dataFile = File(scriptFile, <span class="tok-str">"data.yml"</span>)
+<span class="tok-var">val</span> data = YamlConfiguration()
+
+<span class="tok-kw">if</span> (dataFile.exists()) {
+    data.load(dataFile)                       <span class="tok-com">// đọc dữ liệu cũ</span>
+} <span class="tok-kw">else</span> {
+    dataFile.parentFile.mkdirs()              <span class="tok-com">// tạo thư mục nếu thiếu</span>
+    data.set(<span class="tok-str">"meta.created"</span>, LocalDate.now().toString())
+    data.save(dataFile)                       <span class="tok-com">// ghi file lần đầu</span>
+    logger.info(<span class="tok-str">"[daily_reward] Đã tạo data.yml lần đầu."</span>)
+}
+
+<span class="tok-com">// ---- 2. BẮT EVENT: chào mừng + quà khi vào server ----</span>
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event -&gt;
+    <span class="tok-var">val</span> player = event.player
+    <span class="tok-var">val</span> uuid = player.uniqueId.toString()
+
+    <span class="tok-com">// Chào mừng bằng Adventure (màu MiniMessage)</span>
+    player.sendRichMessage(<span class="tok-str">"&lt;gold&gt;👋 Chào mừng &lt;yellow&gt;&lt;bold&gt;${player.name}&lt;/bold&gt;&lt;/yellow&gt; đến server!"</span>)
+    player.sendRichMessage(<span class="tok-str">"&lt;gray&gt;Gõ &lt;green&gt;/reward&lt;/green&gt; để nhận quà hằng ngày."</span>)
+
+    <span class="tok-com">// Kiểm tra hôm nay đã nhận chưa</span>
+    <span class="tok-var">val</span> last = data.getString(<span class="tok-str">"rewards.$uuid"</span>)
+    <span class="tok-var">val</span> today = LocalDate.now().toString()
+
+    <span class="tok-kw">if</span> (last == today) {
+        player.sendRichMessage(<span class="tok-str">"&lt;red&gt;Bạn đã nhận quà hôm nay rồi. Quay lại ngày mai nhé! ⏰"</span>)
+    } <span class="tok-kw">else</span> {
+        <span class="tok-com">// Chưa nhận → tặng quà + ghi nhớ</span>
+        player.inventory.addItem(ItemStack(Material.DIAMOND, <span class="tok-num">1</span>))
+        player.inventory.addItem(ItemStack(Material.GOLDEN_APPLE, <span class="tok-num">2</span>))
+        data.set(<span class="tok-str">"rewards.$uuid"</span>, today)
+        saveData()
+        player.sendRichMessage(<span class="tok-str">"&lt;green&gt;✅ Đã tặng quà hằng ngày cho bạn!"</span>)
+    }
+}
+
+<span class="tok-com">// ---- 3. ĐĂNG KÝ LỆNH /reward ----</span>
+<span class="tok-kw">command</span>(<span class="tok-str">"reward"</span>) { player, args -&gt;
+    <span class="tok-var">val</span> uuid = player.uniqueId.toString()
+    <span class="tok-var">val</span> last = data.getString(<span class="tok-str">"rewards.$uuid"</span>)
+    <span class="tok-var">val</span> today = LocalDate.now().toString()
+
+    <span class="tok-kw">if</span> (last == today) {
+        player.sendRichMessage(<span class="tok-str">"&lt;red&gt;Hôm nay bạn đã nhận quà rồi. Quay lại vào &lt;yellow&gt;ngày mai&lt;/yellow&gt;! ⏰"</span>)
+    } <span class="tok-kw">else</span> {
+        <span class="tok-com">// Cho phép nhận ngay qua lệnh</span>
+        player.inventory.addItem(ItemStack(Material.DIAMOND, <span class="tok-num">1</span>))
+        player.inventory.addItem(ItemStack(Material.GOLDEN_APPLE, <span class="tok-num">2</span>))
+        data.set(<span class="tok-str">"rewards.$uuid"</span>, today)
+        saveData()
+        player.sendRichMessage(<span class="tok-str">"&lt;green&gt;🎁 Nhận quà thành công qua lệnh!"</span>)
+    }
+}
+
+<span class="tok-com">// ---- 4. HẸN GIỜ: nhắc mọi người nhận quà mỗi 30 phút ----</span>
+<span class="tok-com">// Dùng MiniMessage.miniMessage() để parse tag màu &lt;yellow&gt; cho đúng Adventure.</span>
+server.asyncScheduler.runAtFixedRate(server, {
+    server.broadcast(
+        MiniMessage.miniMessage().deserialize(<span class="tok-str">"&lt;yellow&gt;⏰ Đừng quên nhận quà hằng ngày: gõ /reward!"</span>)
+    )
+}, <span class="tok-num">30</span> * <span class="tok-num">20</span>L, <span class="tok-num">30</span> * <span class="tok-num">60</span> * <span class="tok-num">20</span>L)
+
+<span class="tok-com">// ---- 5. HÀM TIỆN ÍCH ----</span>
+
+<span class="tok-com">/** Lưu dữ liệu xuống file, bọc try/catch để an toàn. */</span>
+<span class="tok-fn">fun</span> saveData() {
+    <span class="tok-kw">try</span> {
+        data.save(dataFile)
+    } <span class="tok-kw">catch</span> (e: Exception) {
+        logger.log(Level.SEVERE, <span class="tok-str">"[daily_reward] Không lưu được data.yml!"</span>, e)
+    }
+}
+
+<span class="tok-com">// ---- 6. LOG KHI NẠP / GỠ ----</span>
+<span class="tok-kw">onLoad</span> {
+    logger.info(<span class="tok-str">"[daily_reward] Đã nạp. Số người đã từng nhận quà: "</span> +
+        (data.getConfigurationSection(<span class="tok-str">"rewards"</span>)?.getKeys(<span class="tok-kw">false</span>)?.size ?: <span class="tok-num">0</span>))
+}
+
+<span class="tok-kw">onUnload</span> {
+    saveData()
+    logger.info(<span class="tok-str">"[daily_reward] Đã gỡ script."</span>)
+}</code></pre>
+
+    <div class="callout note">
+      <div class="ttl">🧠 Script này dạy bạn điều gì</div>
+      <ul style="margin:0">
+        <li><strong>Tự tạo file:</strong> <code>if (!dataFile.exists())</code> → <code>save()</code> để ghi file lần đầu.</li>
+        <li><strong>Đọc file:</strong> <code>YamlConfiguration.load/loadConfiguration</code> đưa dữ liệu cũ vào bộ nhớ.</li>
+        <li><strong>Đăng ký lệnh:</strong> <code>command("reward") { player, args -&gt; ... }</code>.</li>
+        <li><strong>Adventure:</strong> <code>sendRichMessage</code> (màu MiniMessage) và <code>MiniMessage.miniMessage().deserialize()</code> cho broadcast.</li>
+        <li><strong>Scheduler:</strong> <code>server.asyncScheduler.runAtFixedRate</code> để chạy lặp.</li>
+      </ul>
+    </div>
+    <div class="callout note">
+    <!-- ===================== BÀI 14 ===================== -->
+    <h2 id="lop-14"><span class="num">14</span>Message Loader dùng chung</h2>
+    <p>Khi có <strong>nhiều script</strong> cùng dùng một <code>message.yml</code>, bạn không muốn copy-paste hàm gửi tin vào từng file. Kite có cơ chế để <strong>chia sẻ hàm giữa các script</strong> — nhưng có giới hạn. Bài này chỉ rõ 2 cách và <strong>cách nào tốt hơn</strong>.</p>
+
+    <div class="callout warn">
+      <div class="ttl">⚠️ Điều quan trọng nhất: hiểu giới hạn của @file:Import</div>
+      <p style="margin:0"><code>@file:Import("tên.kite.kts")</code> chỉ hoạt động cho các file <strong>trong CÙNG một thư mục con</strong> (thư mục phải có entry point <code>main.kite.kts</code>). Các script <strong>độc lập</strong> đặt thẳng trong <span class="file-path">scripts/</span> <strong>không</strong> import lẫn nhau được — mỗi script tự load <code>message.yml</code> riêng.</p>
+    </div>
+
+    <h3>Cách A — Import dùng chung (1 loader, nhiều script gọi)</h3>
+    <p>Đặt cả project trong 1 <strong>thư mục con</strong> của <span class="file-path">scripts/</span>. Trong folder đó có file entry point bắt buộc tên <span class="file-path">main.kite.kts</span>, loader chứa hàm <code>sendMsg</code>, và các script khác import + gọi thẳng.</p>
+
+    <div class="callout note">
+      <div class="ttl">🗂️ Cấu trúc folder để dùng chung</div>
+      <pre><code>plugins/Kite/scripts/
+└── my_project/          <span class="tok-com">// TẠO THÊM folder con</span>
+    ├── main.kite.kts         <span class="tok-com">// bắt buộc tên "main" (entry point)</span>
+    ├── message_loader.kite.kts  <span class="tok-com">// loader — hàm dùng chung</span>
+    ├── welcome.kite.kts      <span class="tok-com">// script khác dùng sendMsg</span>
+    └── message.yml           <span class="tok-com">// thông điệp dùng chung</span></code></pre>
+      <ul style="margin:0">
+        <li>Folder con = 1 "project". Nạp bằng: <code>/kite load my_project</code> (tên = folder).</li>
+        <li>File entry point <strong>bắt buộc tên <span class="file-path">main.kite.kts</span></strong>.</li>
+        <li>Loader + các script dùng chung đặt <strong>cùng trong folder</strong>.</li>
+        <li><code>message.yml</code> cũng nằm trong folder (vì <code>File(scriptFile, ...)</code> mở file cùng chỗ).</li>
+      </ul>
+    </div>
+
+    <pre><code><span class="tok-com">// main.kite.kts — entry point, import loader</span>
+<span class="tok-ann">@file:Import</span>(<span class="tok-str">"message_loader.kite.kts"</span>)
+
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event -&gt;
+    <span class="tok-var">val</span> player = event.player
+    <span class="tok-fn">sendMsg</span>(player, <span class="tok-str">"join.welcome"</span>, <span class="tok-str">"{player}"</span> to player.name)  <span class="tok-com">// hàm từ loader</span>
+    <span class="tok-fn">sendMsg</span>(player, <span class="tok-str">"join.tip"</span>)
+}</code></pre>
+    <pre><code><span class="tok-com">// message_loader.kite.kts — hàm dùng chung</span>
+<span class="tok-kw">import</span> org.bukkit.configuration.file.YamlConfiguration
+<span class="tok-kw">import</span> java.io.File
+
+<span class="tok-var">val</span> msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+<span class="tok-fn">fun</span> sendMsg(player: Player, path: String, <span class="tok-kw">vararg</span> repl: Pair&lt;String, String&gt;) {
+    <span class="tok-var">val</span> lines: List&lt;String&gt; = <span class="tok-kw">when</span> (<span class="tok-var">val</span> v = msg.get(path)) {
+        <span class="tok-kw">is</span> String -&gt; listOf(v)
+        <span class="tok-kw">is</span> List&lt;*&gt; -&gt; v.filterIsInstance&lt;String&gt;()
+        <span class="tok-kw">else</span> -&gt; <span class="tok-kw">return</span>
+    }
+    lines.forEach { line -&gt;
+        <span class="tok-var">var</span> out = line
+        repl.forEach { (k, v) -&gt; out = out.replace(k, v) }
+        player.sendRichMessage(out)
+    }
+}</code></pre>
+
+    <h3>Cách B — Script độc lập, mỗi script tự load</h3>
+    <p>Các script đặt thẳng trong <span class="file-path">scripts/</span> (không có thư mục con). Mỗi script <strong>tự load message.yml + tự khai báo hàm <code>sendMsg</code></strong>. Đây là cách dùng trong <a href="#lop-13">Bài 13</a>.</p>
+    <pre><code><span class="tok-com">// welcome.kite.kts — script độc lập, tự load message.yml</span>
+<span class="tok-kw">import</span> org.bukkit.configuration.file.YamlConfiguration
+<span class="tok-kw">import</span> java.io.File
+
+<span class="tok-var">val</span> msg = YamlConfiguration.loadConfiguration(File(scriptFile, <span class="tok-str">"message.yml"</span>))
+
+<span class="tok-kw">on</span>&lt;PlayerJoinEvent&gt; { event -&gt;
+    <span class="tok-fn">sendMsg</span>(event.player, <span class="tok-str">"join.welcome"</span>, <span class="tok-str">"{player}"</span> to event.player.name)
+}
+
+<span class="tok-fn">fun</span> sendMsg(player: Player, path: String, <span class="tok-kw">vararg</span> repl: Pair&lt;String, String&gt;) {
+    <span class="tok-var">val</span> lines: List&lt;String&gt; = <span class="tok-kw">when</span> (<span class="tok-var">val</span> v = msg.get(path)) {
+        <span class="tok-kw">is</span> String -&gt; listOf(v)
+        <span class="tok-kw">is</span> List&lt;*&gt; -&gt; v.filterIsInstance&lt;String&gt;()
+        <span class="tok-kw">else</span> -&gt; <span class="tok-kw">return</span>
+    }
+    lines.forEach { line -&gt;
+        <span class="tok-var">var</span> out = line
+        repl.forEach { (k, v) -&gt; out = out.replace(k, v) }
+        player.sendRichMessage(out)
+    }
+}</code></pre>
+
+    <h3>⚖️ So sánh — Cách nào tốt hơn?</h3>
+    <table>
+      <tr><th>Tiêu chí</th><th>A — Import chung</th><th>B — Tự load</th></tr>
+      <tr><td>Viết hàm 1 lần</td><td>✅ 1 nơi</td><td>❌ lặp lại mỗi script</td></tr>
+      <tr><td>Nhiều script dùng chung</td><td>✅ dễ</td><td>⚠️ phải copy hàm</td></tr>
+      <tr><td>Sửa message.yml</td><td>✅ 1 chỗ, mọi script cập nhật</td><td>✅ vẫn 1 file yml chung</td></tr>
+      <tr><td>Độc lập, đơn giản</td><td>⚠️ phải theo cấu trúc thư mục</td><td>✅ gọn, dễ hiểu</td></tr>
+      <tr><td>Phù hợp khi</td><td>Nhiều script, cùng 1 hệ thống</td><td>Vài script đơn lẻ, mới bắt đầu</td></tr>
+    </table>
+
+    <div class="callout success">
+      <div class="ttl">🏆 Kết luận</div>
+      <ul style="margin:0">
+        <li><strong>Mới bắt đầu / vài script đơn lẻ</strong> → dùng <strong>Cách B</strong> (tự load). Đơn giản, không phải học cấu trúc thư mục, không rủi ro lỗi import. Hàm <code>sendMsg</code> ngắn nên copy vài lần cũng không sao.</li>
+        <li><strong>Nhiều script trong 1 hệ thống lớn</strong> (quest, kit, rank…) → dùng <strong>Cách A</strong> (import chung). Viết hàm 1 lần, mọi script gọi chung, dễ bảo trì khi message.yml thay đổi.</li>
+        <li>Dù dùng cách nào, <strong>message.yml vẫn là 1 file chung</strong> trên đĩa — chỉ khác cách mỗi script lấy nội dung.</li>
+      </ul>
+    </div>
+
+    <div class="callout note">
+      <div class="ttl">💡 Lời khuyên</div>
+      <p style="margin:0">Nếu bạn chỉ có 1–2 script đơn giản, đừng phức tạp hóa bằng thư mục con. Bắt đầu với <strong>Cách B</strong>, khi dự án lớn dần lên rồi mới chuyển sang cấu trúc <strong>Cách A</strong>.</p>
+    </div>
+      <div class="ttl">🎓 Chúc mừng — bạn đã đi hết lộ trình!</div>
+      <p style="margin:0">Bây giờ bạn có thể quay lại <a href="kite-wiki.html">wiki chính</a> để xem thêm: Rank (vd8), Warp menu GUI (vd9), Fly (vd10), PvP (vd11), HTTP async (vd5)… và <a href="kite-wiki.html#nguon">các lệnh quản lý</a> như <code>/kite reload</code>, <code>/kite list</code>.</p>
+    </div>
+
+  </main>
+</div>
+
+<button id="backTop" title="Lên đầu trang" aria-label="Lên đầu trang">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>

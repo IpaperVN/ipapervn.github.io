@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shinn.Dev — Minecraft Plugin Developer</title>
+  <meta name="description" content="Portfolio của Shinn.Dev (aka ipaperVN) — nhà phát triển plugin Minecraft cho máy chủ Paper (Kotlin) và chủ sở hữu server Skyblock.">
+  <meta property="og:title" content="Shinn.Dev — Minecraft Plugin Developer">
+  <meta property="og:description" content="Portfolio của Shinn.Dev (aka ipaperVN) — nhà phát triển plugin Minecraft.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ipapervn.github.io/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quinquefive&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-brand">Shinn.Dev</div>
+      <div class="loader-bar"><span id="loaderBar"></span></div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
+  <!-- ===== NAV ===== -->
+  <header class="site-header" id="siteHeader">
+    <nav class="navbar container" aria-label="Điều hướng chính">
+      <a href="#home" class="nav-brand">Shinn.Dev</a>
+      <button class="hamburger" id="hamburger" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#plugins" class="nav-link" data-i18n="nav.plugins">Plugins</a></li>
+        <li><a href="#experience" class="nav-link" data-i18n="nav.experience">Kinh nghiệm</a></li>
+        <li><a href="#blog" class="nav-link" data-i18n="nav.blog">Blog</a></li>
+        <li><a href="#support" class="nav-link" data-i18n="nav.support">Hỗ trợ</a></li>
+        <li><a href="tools.html" class="nav-link" data-i18n="nav.tools">Công cụ</a></li>
+        <li><a href="kite/kite-wiki.html" class="nav-link" data-i18n="nav.wiki">Wiki Kite</a></li>
+        <li><button class="lang-toggle" id="langToggle" aria-label="Đổi ngôn ngữ">EN</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1 class="hero-name">Shinn.<span>Dev</span></h1>
+          <p class="hero-alias">aka ipaperVN</p>
+          <p class="hero-role" data-i18n="hero.role">Minecraft Plugin Developer &amp; Skyblock Server Owner</p>
+          <p class="hero-status"><span class="status-dot"></span><span data-i18n="hero.status">Available for hire</span></p>
+          <p class="hero-tagline" data-i18n="hero.tagline">
+            Tôi xây dựng plugin Minecraft chất lượng cao cho máy chủ Paper — tối ưu hiệu năng, dễ tùy chỉnh và thân thiện với quản trị viên.
+          </p>
+          <div class="hero-cta">
+            <a href="#plugins" class="btn btn-primary" data-i18n="hero.cta-plugins">Xem plugins</a>
+            <a href="#support" class="btn btn-ghost" data-i18n="hero.cta-contact">Liên hệ tôi</a>
+          </div>
+          <p class="hero-orbit-hint">↻ <span data-i18n="hero.orbit">Kéo để xoay</span></p>
+        </div>
+        <div class="hero-art" id="heroArt">
+          <div class="orbit" id="orbit">
+            <img src="assets/img/background.jpg" alt="Artwork" id="orbitImg">
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats container">
+        <div class="stat">
+          <span class="stat-num" data-count="1">0</span><span class="stat-plus">+</span>
+          <span class="stat-label" data-i18n="stat.servers">Máy chủ</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="100">0</span><span class="stat-plus">+</span>
+          <span class="stat-label" data-i18n="stat.users">Người dùng</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="15">0</span><span class="stat-plus">+</span>
+          <span class="stat-label" data-i18n="stat.projects">Dự án</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" data-count="7">0</span>
+          <span class="stat-label" data-i18n="stat.years">Năm kinh nghiệm</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PLUGINS ===== -->
+    <section id="plugins" class="section">
+      <div class="container reveal">
+        <h2 class="section-title" data-i18n="plugins.title">Plugins nổi bật</h2>
+        <p class="section-intro" data-i18n="plugins.intro">Một số plugin và dự án tiêu biểu của tôi.</p>
+        <div class="plugins-grid" id="pluginsGrid"></div>
+        <div class="plugins-more">
+          <a href="projects.html" class="btn btn-ghost" data-i18n="plugins.view-all">Xem tất cả dự án →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EXPERIENCE / ABOUT ===== -->
+    <section id="experience" class="section section-alt">
+      <div class="container reveal">
+        <h2 class="section-title" data-i18n="exp.title">Về tôi &amp; Kinh nghiệm</h2>
+        <div class="exp-body">
+          <p data-i18n="exp.p1">
+            Xin chào! Tôi là <strong>Shinn.Dev</strong> (aka <strong>ipaperVN</strong>) — nhà phát triển plugin
+            Minecraft cho máy chủ Paper, vừa là <strong>chủ sở hữu một máy chủ Skyblock</strong>. Vì tự vận hành
+            server, tôi hiểu rõ nhu cầu thực tế của quản trị viên: plugin phải mượt, ổn định và dễ bảo trì.
+          </p>
+          <p data-i18n="exp.p2">
+            Tôi viết code hoàn toàn bằng Kotlin, từ các plugin đơn giản đến các hệ thống phức tạp như custom items,
+            GUI, vùng bảo vệ, kinh tế skyblock và tối ưu hiệu năng máy chủ.
+          </p>
+        </div>
+        <div class="tech-icons">
+          <span class="tech">Kotlin</span>
+          <span class="tech">Paper</span>
+          <span class="tech">Paper API</span>
+          <span class="tech">Adventure</span>
+          <span class="tech">Folia</span>
+          <span class="tech">Gradle</span>
+          <span class="tech">HTML/CSS</span>
+          <span class="tech">JS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BLOG ===== -->
+    <section id="blog" class="section">
+      <div class="container reveal">
+        <h2 class="section-title" data-i18n="blog.title">Blog</h2>
+        <p class="section-intro" data-i18n="blog.intro">Bài viết về phát triển plugin và quản trị máy chủ.</p>
+        <div class="blog-grid">
+          <article class="blog-card">
+            <div class="blog-tag" data-i18n="blog.cat-tutorial">Hướng dẫn</div>
+            <h3 class="blog-title" data-i18n="blog.post1-title">Bắt đầu với Kite: viết script Kotlin cho Paper</h3>
+            <p class="blog-excerpt" data-i18n="blog.post1-excerpt">Tìm hiểu cách cài đặt plugin Kite và viết script đầu tiên của bạn...</p>
+            <a href="kite/kite-wiki.html" class="card-link" data-i18n="blog.read">Đọc tiếp →</a>
+          </article>
+          <article class="blog-card">
+            <div class="blog-tag" data-i18n="blog.cat-tips">Mẹo</div>
+            <h3 class="blog-title" data-i18n="blog.post2-title">Tối ưu hiệu năng máy chủ Paper</h3>
+            <p class="blog-excerpt" data-i18n="blog.post2-excerpt">Những tham số JVM và cấu hình quan trọng giúp server của bạn mượt hơn...</p>
+            <a href="tools.html" class="card-link" data-i18n="blog.read">Đọc tiếp →</a>
+          </article>
+          <article class="blog-card">
+            <div class="blog-tag" data-i18n="blog.cat-guide">Kinh nghiệm</div>
+            <h3 class="blog-title" data-i18n="blog.post3-title">Từ Legacy sang MiniMessage</h3>
+            <p class="blog-excerpt" data-i18n="blog.post3-excerpt">Chuyển đổi mã màu cũ sang hệ thống Adventure hiện đại trong plugin...</p>
+            <a href="tools.html" class="card-link" data-i18n="blog.read">Đọc tiếp →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SUPPORT / CONTACT ===== -->
+    <section id="support" class="section section-alt">
+      <div class="container reveal">
+        <h2 class="section-title" data-i18n="support.title">Hỗ trợ &amp; Liên hệ</h2>
+        <p class="section-intro" data-i18n="support.intro">
+          Bạn cần một plugin theo yêu cầu, muốn hợp tác, hay cần hỗ trợ? Kết nối với tôi qua Discord nhé!
+        </p>
+
+        <div class="support-layout">
+          <!-- Discord presence card -->
+          <div class="discord-card" id="discordCard">
+            <div class="discord-head">
+              <div class="discord-avatar" id="discordAvatar">iP</div>
+              <div class="discord-id">
+                <span class="discord-name">Shinn.Dev</span>
+                <span class="discord-badge" id="discordStatus">Đang tải trạng thái…</span>
+              </div>
+            </div>
+            <div class="discord-activity" id="discordActivity">
+              Đang kết nối Discord…
+            </div>
+            <a href="#" class="btn btn-primary discord-join" data-i18n="support.join">Tham gia Discord</a>
+          </div>
+
+          <!-- Contact links -->
+          <div class="contact-box">
+            <h3 class="contact-heading" data-i18n="support.other">Liên hệ khác</h3>
+            <a href="https://github.com/ipapervn" target="_blank" rel="noopener" class="contact-link">
+              <span class="contact-icon">🐙</span> <span class="contact-label">GitHub</span>
+            </a>
+            <a href="mailto:ipapervn@example.com" class="contact-link">
+              <span class="contact-icon">✉️</span> <span class="contact-label" data-i18n="contact.email">Email</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year">2026</span> Shinn.Dev (ipaperVN)</p>
+      <p class="footer-note" data-i18n="footer.note">Được xây dựng bằng HTML, CSS &amp; JavaScript thuần.</p>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top" aria-label="Về đầu trang">↑</button>
+
+  <script src="assets/js/projects.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
